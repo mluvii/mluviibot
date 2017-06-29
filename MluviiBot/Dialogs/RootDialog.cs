@@ -56,6 +56,9 @@ namespace ContosoFlowers.Dialogs
 
         private async Task WelcomeMessageAsync(IDialogContext context)
         {
+            if (!context.UserData.ContainsKey(Resources.ClientID_Key))
+                context.UserData.SetValue(Resources.ClientID_Key, Guid.NewGuid().ToString());
+
             var reply = context.MakeMessage();
 
             var options = new[]
@@ -70,6 +73,7 @@ namespace ContosoFlowers.Dialogs
                 new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
 
             await context.PostAsync(reply);
+            
 
             context.Call(this.dialogFactory.Create<InsuranceDialog>(), this.AfterOrderCompleted);
         }

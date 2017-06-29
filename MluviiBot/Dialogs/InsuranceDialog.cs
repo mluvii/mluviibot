@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using ContosoFlowers.Models;
+using ContosoFlowers.Properties;
 using Microsoft.Bot.Builder.ConnectorEx;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
 using MluviiBot.BLL;
+using MluviiBot.Contracts;
 
 namespace ContosoFlowers.Dialogs
 {
@@ -40,6 +42,7 @@ namespace ContosoFlowers.Dialogs
                 this.conversationReference = message.ToConversationReference();
             }
             this.order = new Order();
+            order.ClientID = context.UserData.GetValue<string>(Resources.ClientID_Key);
             PromptDialog.Text(context, this.OnCountrySelected, "Kam se chystáš vyrazit?");
         }
 
@@ -60,6 +63,11 @@ namespace ContosoFlowers.Dialogs
                 PromptDialog.Text(context, this.OnDateFromSelected, "Promin nerozumel jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
             }
+            if (dateFrom <= DateTime.Today)
+            {
+                PromptDialog.Text(context, this.OnDateFromSelected, "Cestovani v case nepojistujeme. Napiš mi prosím datum ve formátu DD.MM.RRRR v budoucnosti", RetryText, MaxAttempts);
+                return;
+            }
 
 
             order.DateFrom = dateFrom;
@@ -75,6 +83,12 @@ namespace ContosoFlowers.Dialogs
                 PromptDialog.Text(context, this.OnDateToSelected, "Promin nerozumel jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
             }
+            if (dateTo <= order.DateFrom)
+            {
+                PromptDialog.Text(context, this.OnDateToSelected, "Cestovani v case nepojistujeme. Napiš mi prosím datum navratu ve formátu DD.MM.RRRR po datu odjezdu", RetryText, MaxAttempts);
+                return;
+            }
+
 
             order.DateFrom = dateTo;
             await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Takze prijezd {this.order.DateFrom} a odjezd {this.order.DateTo}"));
@@ -97,20 +111,11 @@ namespace ContosoFlowers.Dialogs
 
         private void AskInsurancePackage(IDialogContext context)
         {
-            context.Done(order);
-            //            context.Call(this.dialogFactory.Create<BouquetsDialog, string>(this.order.FlowerCategoryName), this.AfterBouquetSelected);
-        }
-
-        private void AskPersonalDetails(IDialogContext context)
-        {
-            var person = new Models.Person();
-            var orderForm = new FormDialog<Models.Person>(person, Models.Person.BuildOrderForm, FormOptions.PromptInStart);
-            context.Call(orderForm, this.AfterOrderForm);
+            context.Call(this.dialogFactory.Create<InsurancePackageDialog, Models.Order>(order), this.AfterInsurancePackageSelected);
         }
 
         private async Task OnAdditionalPersons(IDialogContext context, IAwaitable<long> result)
         {
-
             int count = (int)await result;
             order.PersonCount = count;
 
@@ -132,9 +137,24 @@ namespace ContosoFlowers.Dialogs
             context.Done(order);
         }
 
-        private async Task AfterOrderForm(IDialogContext context, IAwaitable<Person> result)
+        private async Task AfterInsurancePackageSelected(IDialogContext context, IAwaitable<InsurancePackage> result)
         {
-            context.Done(order);
+            var package = await result;
+
+            order.InsurancePackage = package;
+            await context.PostAsync($"Super, takže {package.Name}");
+            await context.PostAsync($"Takže celkem to bude {package.Price} Kč, abych mohl sjednat pojištění budu potřebovat párdalších údajů o tobě");
+            var person = new Models.Person();
+            person.AskDetails = true;
+            var orderForm = new FormDialog<Models.Person>(person, Models.Person.BuildOrderForm, FormOptions.PromptInStart);
+            context.Call(orderForm, this.AfterPersonalDetailsForm);
+        }
+
+        private async Task AfterPersonalDetailsForm(IDialogContext context, IAwaitable<Person> result)
+        {
+            var person = await result;
+            await context.PostAsync($"Ahoj {person.FirstName}");
+            context.Done(this.order);
         }
     }
 }

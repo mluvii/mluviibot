@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ContosoFlowers.BotAssets;
@@ -30,7 +31,7 @@ namespace ContosoFlowers.Dialogs
                 return;
             }
 
-            var strings = personsString.Split(',');
+            var strings = personsString.Split(',').Select(x => x.Trim()).ToList();
             var person = new Models.Person();
             person.FirstName = strings[0];
             person.LastName = strings[1];

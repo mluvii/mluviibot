@@ -177,6 +177,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BLL\FakeCrmService.cs" />
     <Compile Include="BLL\ICRMService.cs" />
+    <Compile Include="Contracts\InsuranceDemand.cs" />
+    <Compile Include="Dialogs\InsurancePackageDialog.cs" />
     <Compile Include="MluviiBotModule.cs" />
     <Compile Include="Contracts\CRMPerson.cs" />
     <Compile Include="Contracts\InsurancePackage.cs" />
@@ -215,6 +217,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\CheckOut\Index.cshtml" />
     <Content Include="Views\CheckOut\Completed.cshtml" />
+    <None Include="Properties\PublishProfiles\MluviiBot - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

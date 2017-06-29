@@ -7,6 +7,6 @@ namespace MluviiBot.BLL
     {
         CRMPerson GetPerson(string email, string phoneNumber);
         void CreatePerson(CRMPerson person);
-        IList<InsurancePackage> GetInsurancePackages(string email);
+        IList<InsurancePackage> GetInsurancePackages(InsuranceDemand insuranceDemand);
     }
 }

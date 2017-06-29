@@ -128,6 +128,9 @@
   <data name="BouquetsDialog_Select" xml:space="preserve">
     <value>Select</value>
   </data>
+  <data name="ClientID_Key" xml:space="preserve">
+    <value>ClientGUID</value>
+  </data>
   <data name="FlowerCategoriesDialog_InvalidOption" xml:space="preserve">
     <value>The category "{0} is invalid. Please try again.</value>
     <comment>{0} is flower category name</comment>

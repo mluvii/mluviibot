@@ -55,6 +55,9 @@ namespace ContosoFlowers
             builder.RegisterType<PersonDialog>()
                 .InstancePerDependency();
 
+            builder.RegisterType<InsurancePackageDialog>()
+                .InstancePerDependency();
+
             // Location Dialog
             // ctor signature: LocationDialog(string apiKey, string channelId, string prompt, LocationOptions options = LocationOptions.None, LocationRequiredFields requiredFields = LocationRequiredFields.None, LocationResourceManager resourceManager = null);
             builder.RegisterType<LocationDialog>()

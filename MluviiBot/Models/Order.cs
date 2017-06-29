@@ -4,14 +4,16 @@ using ContosoFlowers.BotAssets;
 using ContosoFlowers.Services.Models;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
+using MluviiBot.Contracts;
 
 namespace ContosoFlowers.Models
 {
     [Serializable]
     public class Order
     {
+        public string ClientID { get; set; }
         public enum PartyTypes { Single, Party }
-
+        public InsurancePackage InsurancePackage { get; set; }
         public DateTime DateFrom { get; set; }
 
         public DateTime DateTo { get; set; }

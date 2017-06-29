@@ -88,6 +88,15 @@ namespace ContosoFlowers.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ClientGUID.
+        /// </summary>
+        internal static string ClientID_Key {
+            get {
+                return ResourceManager.GetString("ClientID_Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The category &quot;{0} is invalid. Please try again..
         /// </summary>
         internal static string FlowerCategoriesDialog_InvalidOption {
