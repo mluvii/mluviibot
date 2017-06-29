@@ -75,7 +75,7 @@ namespace ContosoFlowers.Dialogs
             await context.PostAsync(reply);
             
 
-            context.Call(this.dialogFactory.Create<InsuranceDialog>(), this.AfterOrderCompleted);
+            context.Call(this.dialogFactory.Create<InsuranceDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
         }
 
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)
