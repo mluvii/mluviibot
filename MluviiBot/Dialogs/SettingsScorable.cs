@@ -12,9 +12,9 @@
     public class SettingsScorable : IScorable<IActivity, double>
     {
         private readonly IDialogTask task;
-        private readonly IContosoFlowersDialogFactory dialogFactory;
+        private readonly IMluviiBotDialogFactory dialogFactory;
 
-        public SettingsScorable(IDialogTask task, IContosoFlowersDialogFactory dialogFactory)
+        public SettingsScorable(IDialogTask task, IMluviiBotDialogFactory dialogFactory)
         {
             SetField.NotNull(out this.task, nameof(task), task);
             SetField.NotNull(out this.dialogFactory, nameof(dialogFactory), dialogFactory);

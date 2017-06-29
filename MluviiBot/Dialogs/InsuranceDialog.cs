@@ -18,12 +18,12 @@ namespace ContosoFlowers.Dialogs
         private ConversationReference conversationReference;
         private Models.Order order;
         private readonly ICRMService crmService;
-        //        private readonly IContosoFlowersDialogFactory dialogFactory;
+        private readonly IMluviiBotDialogFactory dialogFactory;
 
-
-        public InsuranceDialog(ICRMService crmService)
+        public InsuranceDialog(ICRMService crmService, IMluviiBotDialogFactory dialogFactory)
         {
             this.crmService = crmService;
+            this.dialogFactory = dialogFactory;
         }
 
         public async Task StartAsync(IDialogContext context)
@@ -116,8 +116,7 @@ namespace ContosoFlowers.Dialogs
 
             await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"{count} dekuji, teď potřeboval znát jejich jména a datumy narození."));
             order.Persons = new List<Person>();
-            var personDialog = new PersonDialog(order.Persons.Count);
-            context.Call(personDialog, this.AddPerson);
+            context.Call(this.dialogFactory.Create<PersonDialog, int>(order.Persons.Count), this.AddPerson);
         }
 
         private async Task AddPerson(IDialogContext context, IAwaitable<Person> result)
@@ -132,17 +131,6 @@ namespace ContosoFlowers.Dialogs
 
             context.Done(order);
         }
-
-        //        private async Task AddPerson(IDialogContext context, IAwaitable<string> result)
-        //        {
-        //            
-        //
-        //            
-        ////            
-        ////            person.AskDetails = false;
-        ////            var personForm = new FormDialog<Models.Person>(person, Models.Person.BuildOrderForm, FormOptions.PromptInStart);
-        ////            context.Call(personForm, this.AfterOrderForm);
-        //        }
 
         private async Task AfterOrderForm(IDialogContext context, IAwaitable<Person> result)
         {

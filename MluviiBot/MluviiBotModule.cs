@@ -1,4 +1,6 @@
-﻿namespace ContosoFlowers
+﻿using MluviiBot.BLL;
+
+namespace ContosoFlowers
 {
     using System.Configuration;
     using Autofac;
@@ -12,14 +14,18 @@
     using Microsoft.Bot.Connector;
     using Services.Models;
 
-    public class ContosoFlowersModule : Module
+    public class MluviiBotModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
 
-            builder.RegisterType<ContosoFlowersDialogFactory>()
-                .Keyed<IContosoFlowersDialogFactory>(FiberModule.Key_DoNotSerialize)
+            builder.RegisterType<MluviiBotDialogFactory>()
+                .Keyed<IMluviiBotDialogFactory>(FiberModule.Key_DoNotSerialize)
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<FakeCrmService>()
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
@@ -42,6 +48,12 @@
 
             builder.RegisterType<SettingsDialog>()
              .InstancePerDependency();
+
+            builder.RegisterType<InsuranceDialog>()
+                .InstancePerDependency();
+
+            builder.RegisterType<PersonDialog>()
+                .InstancePerDependency();
 
             // Location Dialog
             // ctor signature: LocationDialog(string apiKey, string channelId, string prompt, LocationOptions options = LocationOptions.None, LocationRequiredFields requiredFields = LocationRequiredFields.None, LocationResourceManager resourceManager = null);

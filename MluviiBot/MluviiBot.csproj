@@ -175,8 +175,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BLL\FakeCrmService.cs" />
     <Compile Include="BLL\ICRMService.cs" />
-    <Compile Include="ContosoFlowersModule.cs" />
+    <Compile Include="MluviiBotModule.cs" />
     <Compile Include="Contracts\CRMPerson.cs" />
     <Compile Include="Contracts\InsurancePackage.cs" />
     <Compile Include="Controllers\CheckOutController.cs" />
@@ -185,8 +186,8 @@
     <Compile Include="Dialogs\PersonDialog.cs" />
     <Compile Include="Dialogs\SettingsDialog.cs" />
     <Compile Include="Dialogs\SettingsScorable.cs" />
-    <Compile Include="Dialogs\ContosoFlowersDialogFactory.cs" />
-    <Compile Include="Dialogs\IContosoFlowersDialogFactory.cs" />
+    <Compile Include="Dialogs\MluviiBotDialogFactory.cs" />
+    <Compile Include="Dialogs\IMluviiBotDialogFactory.cs" />
     <Compile Include="Dialogs\BouquetsDialog.cs" />
     <Compile Include="Dialogs\FlowerCategoriesDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />

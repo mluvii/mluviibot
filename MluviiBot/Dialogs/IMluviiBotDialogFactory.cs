@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
     using BotAssets;
-    using ContosoFlowers.BotAssets.Dialogs;
+    using BotAssets.Dialogs;
 
-    public interface IContosoFlowersDialogFactory : IDialogFactory
+    public interface IMluviiBotDialogFactory : IDialogFactory
     {
         SavedAddressDialog CreateSavedAddressDialog(
             string prompt,

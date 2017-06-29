@@ -27,7 +27,7 @@
             Conversation.UpdateContainer(builder =>
             {
                 builder.RegisterModule(new ReflectionSurrogateModule());
-                builder.RegisterModule<ContosoFlowersModule>();
+                builder.RegisterModule<MluviiBotModule>();
                 builder.RegisterControllers(typeof(WebApiApplication).Assembly);
             });
 

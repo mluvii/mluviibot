@@ -1,4 +1,6 @@
-﻿namespace ContosoFlowers.Dialogs
+﻿using MluviiBot.BLL;
+
+namespace ContosoFlowers.Dialogs
 {
     using System;
     using System.Collections.Generic;
@@ -22,13 +24,13 @@
     public class RootDialog : IDialog<object>
     {
         private readonly string checkoutUriFormat;
-        private readonly IContosoFlowersDialogFactory dialogFactory;
+        private readonly IMluviiBotDialogFactory dialogFactory;
         private readonly IOrdersService ordersService;
 
         private Models.Order order;
         private ConversationReference conversationReference;
         
-        public RootDialog(string checkoutUriFormat, IContosoFlowersDialogFactory dialogFactory, IOrdersService ordersService)
+        public RootDialog(string checkoutUriFormat, IMluviiBotDialogFactory dialogFactory, IOrdersService ordersService)
         {
             this.checkoutUriFormat = checkoutUriFormat;
             this.dialogFactory = dialogFactory;
@@ -69,8 +71,7 @@
 
             await context.PostAsync(reply);
 
-            var dialog = new InsuranceDialog(null);
-            context.Call(dialog, this.AfterOrderCompleted);
+            context.Call(this.dialogFactory.Create<InsuranceDialog>(), this.AfterOrderCompleted);
         }
 
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)

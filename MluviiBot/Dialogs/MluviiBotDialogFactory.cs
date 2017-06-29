@@ -6,9 +6,9 @@
     using BotAssets.Dialogs;
     using Microsoft.Bot.Builder.Internals.Fibers;
 
-    public class ContosoFlowersDialogFactory : DialogFactory, IContosoFlowersDialogFactory
+    public class MluviiBotDialogFactory : DialogFactory, IMluviiBotDialogFactory
     {
-        public ContosoFlowersDialogFactory(IComponentContext scope)
+        public MluviiBotDialogFactory(IComponentContext scope)
             : base(scope)
         {
         }

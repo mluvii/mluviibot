@@ -17,11 +17,11 @@
     [Serializable]
     public class SettingsDialog : IDialog<object>
     {
-        private readonly IContosoFlowersDialogFactory dialogFactory;
+        private readonly IMluviiBotDialogFactory dialogFactory;
 
         private string selectedAddressToUpdate;
 
-        public SettingsDialog(IContosoFlowersDialogFactory dialogFactory)
+        public SettingsDialog(IMluviiBotDialogFactory dialogFactory)
         {
             SetField.NotNull(out this.dialogFactory, nameof(dialogFactory), dialogFactory);
         }
