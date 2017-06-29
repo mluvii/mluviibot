@@ -94,14 +94,14 @@ namespace ContosoFlowers.Dialogs
                 PromptDialog.Text(context, this.OnDateToSelected, "Promin nerozumel jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
             }
-            if (dateTo <= order.DateFrom)
+            if (dateTo < order.DateFrom)
             {
                 PromptDialog.Text(context, this.OnDateToSelected, "Cestovani v case nepojistujeme. Napiš mi prosím datum navratu ve formátu DD.MM.RRRR po datu odjezdu", RetryText, MaxAttempts);
                 return;
             }
 
 
-            order.DateFrom = dateTo;
+            order.DateTo = dateTo;
             await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Takze prijezd {this.order.DateFrom} a odjezd {this.order.DateTo}"));
             PromptDialog.Choice(context, this.OnPartySelected, new[] { "Sam", "S nekym" }, "Cestuješ sám nebo ještě s někým?", RetryText, MaxAttempts);
         }
