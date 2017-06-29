@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContosoFlowers", "MluviiBot\MluviiBot.csproj", "{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MluviiBot", "MluviiBot\MluviiBot.csproj", "{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContosoFlowers.Services", "ContosoFlowers.Services\ContosoFlowers.Services.csproj", "{2ABDF0FC-7533-41B0-B530-3003D4D2EF4E}"
 EndProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "README", "README", "{FF61A1
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniqaFlowers", "UniqaFlowers\UniqaFlowers.csproj", "{781C4C08-8716-4594-8115-FDCC0726D9CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{4010E1D2-220E-44CA-9259-92B1B2ACC794}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4010E1D2-220E-44CA-9259-92B1B2ACC794}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4010E1D2-220E-44CA-9259-92B1B2ACC794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{781C4C08-8716-4594-8115-FDCC0726D9CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{781C4C08-8716-4594-8115-FDCC0726D9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{781C4C08-8716-4594-8115-FDCC0726D9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{781C4C08-8716-4594-8115-FDCC0726D9CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

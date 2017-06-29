@@ -10,6 +10,7 @@ using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
 using MluviiBot.BLL;
 using MluviiBot.Contracts;
+using UniqaFlowers;
 
 namespace ContosoFlowers.Dialogs
 {

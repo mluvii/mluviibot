@@ -14,6 +14,7 @@ namespace ContosoFlowers.Dialogs
     using Properties;
     using Services;
     using Services.Models;
+    using UniqaFlowers;
 
     [Serializable]
     public class InsurancePackageDialog : PagedCarouselDialog<InsurancePackage>

@@ -5,6 +5,7 @@ using ContosoFlowers.Services.Models;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
 using MluviiBot.Contracts;
+using UniqaFlowers;
 
 namespace ContosoFlowers.Models
 {
