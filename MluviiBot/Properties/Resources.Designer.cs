@@ -178,7 +178,7 @@ namespace ContosoFlowers.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changed my mind.
+        ///   Looks up a localized string similar to Zpet.
         /// </summary>
         internal static string RootDialog_Checkout_Cancel {
             get {
@@ -187,7 +187,7 @@ namespace ContosoFlowers.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add credit card.
+        ///   Looks up a localized string similar to Platebni karta.
         /// </summary>
         internal static string RootDialog_Checkout_Continue {
             get {
@@ -205,7 +205,7 @@ namespace ContosoFlowers.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The final price is {0} (including delivery). Pay securely using our payment provider..
+        ///   Looks up a localized string similar to Konecna cena je {0}. Zaplatit muzete pres nasi bezpecnou platebni branu..
         /// </summary>
         internal static string RootDialog_Checkout_Prompt {
             get {

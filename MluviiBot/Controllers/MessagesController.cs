@@ -60,11 +60,11 @@
             {
                 if (message.MembersAdded.Any(o => o.Id == message.Recipient.Id))
                 {
-                    var reply = message.CreateReply(Resources.RootDialog_Welcome_Message);
-
-                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
-
-                    await connector.Conversations.ReplyToActivityAsync(reply);
+//                    var reply = message.CreateReply(Resources.RootDialog_Welcome_Message);
+//
+//                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
+//
+//                    await connector.Conversations.ReplyToActivityAsync(reply);
                 }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)

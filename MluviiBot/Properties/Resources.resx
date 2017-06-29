@@ -161,17 +161,17 @@
     <comment>{0} bouquet name</comment>
   </data>
   <data name="RootDialog_Checkout_Cancel" xml:space="preserve">
-    <value>Changed my mind</value>
+    <value>Zpet</value>
   </data>
   <data name="RootDialog_Checkout_Continue" xml:space="preserve">
-    <value>Add credit card</value>
+    <value>Platebni karta</value>
   </data>
   <data name="RootDialog_Checkout_Error" xml:space="preserve">
     <value>The order with ID '{0}' does not exists or is not confirmed. Please try to checkout again.</value>
     <comment>{0} is order ID</comment>
   </data>
   <data name="RootDialog_Checkout_Prompt" xml:space="preserve">
-    <value>The final price is {0} (including delivery). Pay securely using our payment provider.</value>
+    <value>Konecna cena je {0}. Zaplatit muzete pres nasi bezpecnou platebni branu.</value>
     <comment>{0} is bouquet price</comment>
   </data>
   <data name="RootDialog_DeliveryAddress_Prompt" xml:space="preserve">

@@ -208,8 +208,9 @@ namespace ContosoFlowers.Dialogs
             var locationDialog = this.dialogFactory.Create<LocationDialog>(
                 new Dictionary<string, object>()
                 {
-                    { "prompt", "Napis mi prosim svoji adresu" },
-                    { "channelId", context.Activity.ChannelId }
+                    { "prompt", "" },
+                    { "channelId", context.Activity.ChannelId },
+                    { "options", LocationOptions.SkipFavorites | LocationOptions.SkipFinalConfirmation },
                 });
 
             context.Call(locationDialog, this.AfterLocation);
@@ -218,7 +219,7 @@ namespace ContosoFlowers.Dialogs
         private async Task AfterLocation(IDialogContext context, IAwaitable<Place> result)
         {
             var place = await result;
-            order.BillingAddress = place.Address;
+            order.BillingAddress = place.Address.FormattedAddress;
             await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Díky moc, teď už mám všechno, připravím rekapitulaci tvého pojištění, kde ho můžeš rovnou i zaplatit.Po zaplacení ti vše pošlu do emailu."));
             await PaymentSelectionAsync(context);
         }
@@ -230,7 +231,7 @@ namespace ContosoFlowers.Dialogs
             var serviceModel = Mapper.Map<Services.Models.Order>(this.order);
             if (this.order.OrderID == null)
             {
-                this.order.OrderID = Guid.NewGuid().ToString();
+                this.order.OrderID = this.ordersService.PlacePendingOrder(serviceModel);
             }
 
             var checkoutUrl = this.BuildCheckoutUrl(this.order.OrderID);
