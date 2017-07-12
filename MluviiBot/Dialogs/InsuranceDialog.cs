@@ -105,7 +105,7 @@ namespace ContosoFlowers.Dialogs
 
 
             order.DateTo = dateTo.Value;
-            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Takže příjezd {this.order.DateFrom} a odjezd {this.order.DateTo}"));
+            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Takže příjezd {this.order.DateFrom:d} a odjezd {this.order.DateTo:d}"));
             PromptDialog.Choice(context, this.OnPartySelected, new[] { "Sám", "S někým" }, "Cestuješ sám nebo ještě s někým?", RetryText, MaxAttempts);
         }
 
