@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
@@ -61,7 +63,7 @@ namespace ContosoFlowers.Dialogs
         {
             var message = await result;
             this.order.Country = message;
-            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Dobre, {this.order.Country}"));
+            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Dobře, {this.order.Country}"));
             PromptDialog.Text(context, this.OnDateFromSelected, "Kdy chceš odjíždět? Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
         }
 
@@ -71,12 +73,12 @@ namespace ContosoFlowers.Dialogs
             DateTime dateFrom;
             if (!DateTime.TryParseExact(message, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out dateFrom))
             {
-                PromptDialog.Text(context, this.OnDateFromSelected, "Promin nerozumel jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
+                PromptDialog.Text(context, this.OnDateFromSelected, "Promiň nerozuměl jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
             }
             if (dateFrom <= DateTime.Today)
             {
-                PromptDialog.Text(context, this.OnDateFromSelected, "Cestovani v case nepojistujeme. Napiš mi prosím datum ve formátu DD.MM.RRRR v budoucnosti", RetryText, MaxAttempts);
+                PromptDialog.Text(context, this.OnDateFromSelected, "Cestovaní v čase nepojišťujeme. Napiš mi prosím datum ve formátu DD.MM.RRRR v budoucnosti", RetryText, MaxAttempts);
                 return;
             }
 
@@ -91,32 +93,32 @@ namespace ContosoFlowers.Dialogs
             DateTime dateTo;
             if (!DateTime.TryParseExact(message, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out dateTo))
             {
-                PromptDialog.Text(context, this.OnDateToSelected, "Promin nerozumel jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
+                PromptDialog.Text(context, this.OnDateToSelected, "Promiň nerozuměl jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
             }
             if (dateTo < order.DateFrom)
             {
-                PromptDialog.Text(context, this.OnDateToSelected, "Cestovani v case nepojistujeme. Napiš mi prosím datum navratu ve formátu DD.MM.RRRR po datu odjezdu", RetryText, MaxAttempts);
+                PromptDialog.Text(context, this.OnDateToSelected, "Cestovaní v čase nepojišťujeme. Napiš mi prosím datum návratu ve formátu DD.MM.RRRR po datu odjezdu", RetryText, MaxAttempts);
                 return;
             }
 
 
             order.DateTo = dateTo;
-            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Takze prijezd {this.order.DateFrom} a odjezd {this.order.DateTo}"));
-            PromptDialog.Choice(context, this.OnPartySelected, new[] { "Sam", "S nekym" }, "Cestuješ sám nebo ještě s někým?", RetryText, MaxAttempts);
+            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Takže příjezd {this.order.DateFrom} a odjezd {this.order.DateTo}"));
+            PromptDialog.Choice(context, this.OnPartySelected, new[] { "Sám", "S někým" }, "Cestuješ sám nebo ještě s někým?", RetryText, MaxAttempts);
         }
 
         private async Task OnPartySelected(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
 
-            if (message.Equals("sam", StringComparison.InvariantCultureIgnoreCase))
+            if (new[] { "sam" , "sám"}.Contains(message.Trim(), StringComparer.InvariantCultureIgnoreCase))
             {
                 AskInsurancePackage(context);
             }
             else
             {
-                PromptDialog.Number(context, this.OnAdditionalPersons, "Mužes mi napsat jejich počet?", RetryText, MaxAttempts);
+                PromptDialog.Number(context, this.OnAdditionalPersons, "Můžes mi napsat jejich počet?", RetryText, MaxAttempts);
             }
         }
 
@@ -130,7 +132,7 @@ namespace ContosoFlowers.Dialogs
             int count = (int)await result;
             order.PersonCount = count;
 
-            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"{count} dekuji, teď potřeboval znát jejich jména a datumy narození."));
+            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"{count} děkuji, teď bych potřeboval znát jejich jména a datumy narození."));
             order.Persons = new List<Person>();
             context.Call(this.dialogFactory.Create<PersonDialog, int>(order.Persons.Count), this.AddPerson);
         }
@@ -154,12 +156,9 @@ namespace ContosoFlowers.Dialogs
 
             order.InsurancePackage = package;
             await context.PostAsync($"Super, takže {package.Name}");
-            await context.PostAsync($"Takže celkem to bude {package.Price} Kč, abych mohl sjednat pojištění budu potřebovat párdalších údajů o tobě");
+            await context.PostAsync($"Takže celkem to bude {package.Price} Kč, abych mohl sjednat pojištění budu potřebovat pár dalších údajů o tobě");
             order.CustomerDetails = new Models.Person();
             PromptDialog.Text(context, this.OnNameGiven, "Můžeš mi napsat tvé jméno", RetryText, MaxAttempts);
-
-            //            var orderForm = new FormDialog<Models.Person>(person, Models.Person.BuildOrderForm, FormOptions.PromptInStart);
-            //            context.Call(orderForm, this.AfterPersonalDetailsForm);
         }
 
         private async Task OnNameGiven(IDialogContext context, IAwaitable<string> result)
@@ -175,7 +174,7 @@ namespace ContosoFlowers.Dialogs
             var surname = await result;
             order.CustomerDetails.LastName = surname;
             await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Díky, takže {order.CustomerDetails.FirstName} {order.CustomerDetails.LastName}"));
-            PromptDialog.Text(context, this.OnBirthDateGiven, $"Teď bych potřeboval datum tvé datum narození, napiš mi ho prosím ve tvaru DD.MM.RRRR", RetryText, MaxAttempts);
+            PromptDialog.Text(context, this.OnBirthDateGiven, $"Teď bych potřeboval tvé datum narození, napiš mi ho prosím ve tvaru DD.MM.RRRR", RetryText, MaxAttempts);
         }
 
         private async Task OnBirthDateGiven(IDialogContext context, IAwaitable<string> result)
@@ -184,34 +183,24 @@ namespace ContosoFlowers.Dialogs
             DateTime birthDate;
             if (!DateTime.TryParseExact(message, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out birthDate))
             {
-                PromptDialog.Text(context, this.OnBirthDateGiven, "Promin nerozumel jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
+                PromptDialog.Text(context, this.OnBirthDateGiven, "Promiň nerozuměl jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
             }
             if ((DateTime.Today - birthDate).TotalDays > 365 * 100)
             {
-                PromptDialog.Text(context, this.OnBirthDateGiven, "Zombie nepojistujeme. Napiš mi prosím datum narozeni nekoho ziveho", RetryText, MaxAttempts);
-                return;
-            }
-            if ((DateTime.Today - birthDate).TotalDays < 365 * 5)
-            {
-                PromptDialog.Text(context, this.OnBirthDateGiven, "Batolata nepojistujeme. Napiš mi prosím datum narozeni nekoho dospeleho", RetryText, MaxAttempts);
-                return;
-            }
-            if ((DateTime.Today - birthDate).TotalDays < 365 * 18)
-            {
-                PromptDialog.Text(context, this.OnBirthDateGiven, "Deti nepojistujeme. Napiš mi prosím datum narozeni nekoho dospeleho", RetryText, MaxAttempts);
+                PromptDialog.Text(context, this.OnBirthDateGiven, "Zombie nepojišťujeme. Napiš mi prosím datum narození někoho živého", RetryText, MaxAttempts);
                 return;
             }
 
             // BotBuilder's LocationDialog
             // Leverage DI to inject other parameters
-            var locationDialog = this.dialogFactory.Create<LocationDialog>(
-                new Dictionary<string, object>()
-                {
-                    { "prompt", "" },
-                    { "channelId", context.Activity.ChannelId },
-                    { "options", LocationOptions.SkipFavorites | LocationOptions.SkipFinalConfirmation },
-                });
+                        var locationDialog = this.dialogFactory.Create<LocationDialog>(
+                            new Dictionary<string, object>()
+                            {
+                                { "prompt", "" },
+                                { "channelId", context.Activity.ChannelId },
+                                { "options", LocationOptions.SkipFavorites | LocationOptions.SkipFinalConfirmation },
+                            });
 
             context.Call(locationDialog, this.AfterLocation);
         }
@@ -358,7 +347,7 @@ namespace ContosoFlowers.Dialogs
 
         private async Task AfterPayment(IDialogContext context)
         {
-            await context.PostAsync($"Diky {order.CustomerDetails.FirstName}, mej se.");
+            await context.PostAsync($"Diky {order.CustomerDetails.FirstName}, měj se.");
             context.Done(this.order);
         }
     }

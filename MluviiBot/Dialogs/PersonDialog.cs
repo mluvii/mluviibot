@@ -19,7 +19,7 @@ namespace ContosoFlowers.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            PromptDialog.Text(context, this.AddPerson, $"{PersonCounter + 1}. osobu prosim. Format: Jméno, Příjmení, datum narození", Resources.RetryText, 3);
+            PromptDialog.Text(context, this.AddPerson, $"{PersonCounter + 1}. osobu prosím. Format: Jméno, Příjmení, datum narození", Resources.RetryText, 3);
         }
 
         private async Task AddPerson(IDialogContext context, IAwaitable<string> result)

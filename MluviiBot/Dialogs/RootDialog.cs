@@ -81,7 +81,7 @@ namespace ContosoFlowers.Dialogs
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)
         {
             order = await result;
-            await context.SayAsync("Nevim co dal protoze sem mrzak. Ahoj.");
+            await context.SayAsync("Nevim co dál protože sem mrzák. Ahoj.");
             context.Done(order);
         }
 
