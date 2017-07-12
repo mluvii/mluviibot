@@ -115,7 +115,7 @@ namespace ContosoFlowers.BotAssets.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OK, you want to use {0}. Is that correct? Enter &apos;yes&apos; or &apos;no&apos;..
+        ///   Looks up a localized string similar to Dobře, takže {0}. Je to správně?.
         /// </summary>
         internal static string Location_ConfirmationAsk {
             get {

@@ -29,7 +29,7 @@ namespace ContosoFlowers.Dialogs
             this.order = order;
         }
 
-        public override string Prompt => "Jaký ty pojištění by jsi chtěl?";
+        public override string Prompt => "Jaký pojištění by jsi chtěl?";
 
         public override PagedCarouselCards GetCarouselCards(int pageNumber, int pageSize)
         {
@@ -68,7 +68,7 @@ namespace ContosoFlowers.Dialogs
             }
             else
             {
-                await context.PostAsync(string.Format(CultureInfo.CurrentCulture, "Vybrals BLBE!", bouquetName));
+                await context.PostAsync(string.Format(CultureInfo.CurrentCulture, "Vybrals BLBĚ!", bouquetName));
                 await this.ShowProducts(context);
                 context.Wait(this.MessageReceivedAsync);
             }

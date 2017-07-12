@@ -154,6 +154,6 @@
     <value>No, thanks!</value>
   </data>
   <data name="Location_ConfirmationAsk" xml:space="preserve">
-    <value>OK, you want to use {0}. Is that correct? Enter 'yes' or 'no'.</value>
+    <value>Dobře, takže {0}. Je to správně?</value>
   </data>
 </root>
