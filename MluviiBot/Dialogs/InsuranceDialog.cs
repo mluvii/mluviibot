@@ -70,8 +70,8 @@ namespace ContosoFlowers.Dialogs
         private async Task OnDateFromSelected(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
-            DateTime dateFrom;
-            if (!DateTime.TryParseExact(message, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out dateFrom))
+            DateTime? dateFrom = ParseDateTime(message);
+            if (!dateFrom.HasValue)
             {
                 PromptDialog.Text(context, this.OnDateFromSelected, "Promiň nerozuměl jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
@@ -83,15 +83,16 @@ namespace ContosoFlowers.Dialogs
             }
 
 
-            order.DateFrom = dateFrom;
+            order.DateFrom = dateFrom.Value;
             PromptDialog.Text(context, this.OnDateToSelected, "Kdy se budeš vracet? Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
         }
 
+       
         private async Task OnDateToSelected(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
-            DateTime dateTo;
-            if (!DateTime.TryParseExact(message, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out dateTo))
+            DateTime? dateTo = ParseDateTime(message);
+            if (!dateTo.HasValue)
             {
                 PromptDialog.Text(context, this.OnDateToSelected, "Promiň nerozuměl jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
@@ -103,7 +104,7 @@ namespace ContosoFlowers.Dialogs
             }
 
 
-            order.DateTo = dateTo;
+            order.DateTo = dateTo.Value;
             await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Takže příjezd {this.order.DateFrom} a odjezd {this.order.DateTo}"));
             PromptDialog.Choice(context, this.OnPartySelected, new[] { "Sám", "S někým" }, "Cestuješ sám nebo ještě s někým?", RetryText, MaxAttempts);
         }
@@ -180,13 +181,13 @@ namespace ContosoFlowers.Dialogs
         private async Task OnBirthDateGiven(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
-            DateTime birthDate;
-            if (!DateTime.TryParseExact(message, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out birthDate))
+            DateTime? birthDate = ParseDateTime(message);
+            if (!birthDate.HasValue)
             {
                 PromptDialog.Text(context, this.OnBirthDateGiven, "Promiň nerozuměl jsem. Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
                 return;
             }
-            if ((DateTime.Today - birthDate).TotalDays > 365 * 100)
+            if ((DateTime.Today - birthDate).Value.TotalDays > 365 * 100)
             {
                 PromptDialog.Text(context, this.OnBirthDateGiven, "Zombie nepojišťujeme. Napiš mi prosím datum narození někoho živého", RetryText, MaxAttempts);
                 return;
@@ -350,5 +351,18 @@ namespace ContosoFlowers.Dialogs
             await context.PostAsync($"Diky {order.CustomerDetails.FirstName}, měj se.");
             context.Done(this.order);
         }
+
+        private DateTime? ParseDateTime(string text)
+        {
+            DateTime date1;
+            if (DateTime.TryParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out date1))
+                return date1;
+            DateTime date2;
+            if (DateTime.TryParseExact(text, "d.M.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out date2))
+                return date2;
+
+            return null;
+        }
+
     }
 }
