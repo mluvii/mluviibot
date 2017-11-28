@@ -11,6 +11,7 @@
     using Microsoft.Bot.Builder.Dialogs.Internals;
     using Microsoft.Bot.Connector;
     using Properties;
+    using ContosoFlowers.BotAssets.Extensions;
 
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -23,7 +24,7 @@
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                // The Configured IISExpressSSLPort property in this project file
+                //The Configured IISExpressSSLPort property in this project file
                 const int ConfiguredHttpsPort = 44371;
 
                 var link = Url.Link("CheckOut", new { controller = "CheckOut", action = "Index" });
@@ -60,11 +61,24 @@
             {
                 if (message.MembersAdded.Any(o => o.Id == message.Recipient.Id))
                 {
-//                    var reply = message.CreateReply(Resources.RootDialog_Welcome_Message);
-//
-//                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
-//
-//                    await connector.Conversations.ReplyToActivityAsync(reply);
+                    //var reply = message.CreateReply(Resources.RootDialog_Welcome_Message);
+                    var reply = message.CreateReply();
+
+                    var options = new[]
+                    {
+                        "Sjednat cestovní pojištění",
+                        "Nahlásit pojistnou událost",
+                    };
+                    reply.AddHeroCard(
+                        "Ahoj jak ti mohu pomoci?",
+                        "",
+                        options,
+                        new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
+                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
+
+                    await connector.Conversations.ReplyToActivityAsync(reply);
+
+                    // The Configured IISExpressSSLPort property in this project file
                 }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)

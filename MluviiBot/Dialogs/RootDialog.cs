@@ -39,7 +39,7 @@ namespace ContosoFlowers.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            context.Wait(this.MessageReceivedAsync);
+            context.Call(this.dialogFactory.Create<InsuranceDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -50,7 +50,6 @@ namespace ContosoFlowers.Dialogs
             {
                 this.conversationReference = message.ToConversationReference();
             }
-
             await this.WelcomeMessageAsync(context);
         }
 

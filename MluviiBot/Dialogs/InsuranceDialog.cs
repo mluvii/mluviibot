@@ -16,6 +16,7 @@ using Microsoft.Bot.Builder.Location;
 using Microsoft.Bot.Connector;
 using MluviiBot.BLL;
 using MluviiBot.Contracts;
+using Newtonsoft.Json.Linq;
 using UniqaFlowers;
 
 namespace ContosoFlowers.Dialogs
@@ -43,6 +44,8 @@ namespace ContosoFlowers.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
+            if (!context.UserData.ContainsKey(Resources.ClientID_Key))
+                context.UserData.SetValue(Resources.ClientID_Key, Guid.NewGuid().ToString());
             context.Wait(this.MessageReceivedAsync);
         }
 
@@ -63,6 +66,11 @@ namespace ContosoFlowers.Dialogs
         {
             var message = await result;
             this.order.Country = message;
+            //var data = JObject.Parse(@"{ ""Activity"": ""Forward"", ""OperatorGroupID"": ""183"" }");
+            //var act = context.MakeMessage();
+            //act.Text = "Prepojuju te na operatora!";
+            //act.ChannelData = data;
+            //await context.PostAsync(act);
             await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Dobře, {this.order.Country}"));
             PromptDialog.Text(context, this.OnDateFromSelected, "Kdy chceš odjíždět? Napiš mi prosím datum ve formátu DD.MM.RRRR", RetryText, MaxAttempts);
         }
