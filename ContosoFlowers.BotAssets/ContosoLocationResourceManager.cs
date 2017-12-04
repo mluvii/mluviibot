@@ -8,7 +8,7 @@
     public class ContosoLocationResourceManager : LocationResourceManager
     {
         public override string ConfirmationAsk => Resources.Location_ConfirmationAsk;
-        public override string SelectLocation => "Napiš svoji adresu";
+        public override string SelectLocation => "Teď budu potřebovat Vaši fakturační adresu.";
         public override string InvalidLocationResponse => "Hmm, to nemůže být správně. Nepřepsal si se? Zkus to prosím znovu.";
         public override string LocationNotFound => "Tuto adresu jsem nenašel :( Zkus to prosím znovu";
         public override string MultipleResultsFound => "Našel jsem více míst, vyber prosím to správné.";

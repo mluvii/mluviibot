@@ -62,11 +62,11 @@ namespace ContosoFlowers.Dialogs
 
             var options = new[]
             {
-                "Sjednat cestovní pojištění",
-                "Nahlásit pojistnou událost",
+                "Zájem o produkt",
+                "Pouze dotaz",
             };
             reply.AddHeroCard(
-                "Ahoj jak ti mohu pomoci?",
+                "Dobrý den, jak Vám mohu pomoci?",
                 "",
                 options,
                 new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
@@ -80,7 +80,6 @@ namespace ContosoFlowers.Dialogs
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)
         {
             order = await result;
-            await context.SayAsync("Nevim co dál protože sem mrzák. Ahoj.");
             context.Done(order);
         }
 

@@ -26,10 +26,21 @@ namespace ContosoFlowers.Models
         public string Country { get; set; }
 
         public string BillingAddress { get; set; }
+        public LicenceType LicenceType { get; set; }
 
         public bool Paid { get; set; }
 
         public PaymentDetails PaymentDetails { get; set; }
 
+        public Order()
+        {
+            CustomerDetails = new Person();
+        }
+    }
+
+    public enum LicenceType
+    {
+        One,
+        Multiple
     }
 }

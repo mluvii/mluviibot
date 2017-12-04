@@ -15,7 +15,7 @@ namespace ContosoFlowers.Models
 
         [Prompt]
         [Pattern(RegexConstants.Phone)]
-        public string Phone { get; set; }
+        public long Phone { get; set; }
 
         [Prompt]
         [Pattern(RegexConstants.Email)]

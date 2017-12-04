@@ -66,11 +66,11 @@
 
                     var options = new[]
                     {
-                        "Sjednat cestovní pojištění",
-                        "Nahlásit pojistnou událost",
+                        "Zájem o produkt",
+                        "Pouze dotaz",
                     };
                     reply.AddHeroCard(
-                        "Ahoj jak ti mohu pomoci?",
+                        "Dobrý den, jak Vám mohu pomoci?",
                         "",
                         options,
                         new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
