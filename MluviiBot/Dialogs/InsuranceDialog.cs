@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
+using ContosoFlowers.BLL;
+using ContosoFlowers.BotAssets;
 using ContosoFlowers.BotAssets.Extensions;
 using ContosoFlowers.Models;
 using ContosoFlowers.Properties;
@@ -93,25 +96,25 @@ namespace ContosoFlowers.Dialogs
             var surname = await result;
             order.CustomerDetails.LastName = surname;
             await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Děkuji, takže {order.CustomerDetails.FirstName} {order.CustomerDetails.LastName}"));
-            PromptDialog.Number(context, this.OnPhoneGiven, $"Teď bych potřeboval Vaše telefonní číslo (9 míst)", RetryText, MaxAttempts);
+            PromptDialog.Text(context, this.OnPhoneGiven, $"Teď bych potřeboval Vaše telefonní číslo (9 míst)", RetryText, MaxAttempts);
         }
         
-        private async Task OnPhoneGiven(IDialogContext context, IAwaitable<long> result)
+        private async Task OnPhoneGiven(IDialogContext context, IAwaitable<string> result)
         {
             var phone = await result;
-            if (phone.ToString().Trim().Length != 9)
+            if (!ValidationUtils.Validate(phone.Trim(), RegexConstants.NINE_DIGITS))
             {
-                PromptDialog.Number(context, this.OnPhoneGiven, "Tento telefon nevypadá správně, pište prosím pouze 9 čísel.", RetryText, MaxAttempts);
+                PromptDialog.Text(context, this.OnPhoneGiven, "Tento telefon nevypadá správně, pište prosím pouze 9 čísel.", RetryText, MaxAttempts);
                 return;
             }
-            order.CustomerDetails.Phone = phone;
+            order.CustomerDetails.Phone = long.Parse(phone);
             PromptDialog.Text(context, this.OnEmailGiven, $"Děkuji, těď Vás poprosím o email.", RetryText, MaxAttempts);
         }
 
         private async Task OnEmailGiven(IDialogContext context, IAwaitable<string> result)
         {
             var email = await result;
-            if (!EmailValid(email))
+            if (!ValidationUtils.Validate(email, RegexConstants.EMAIL))
             {
                 PromptDialog.Text(context, this.OnEmailGiven, "Tento email nevypadá správně, zkuste to prosím znovu.", RetryText, MaxAttempts);
                 return;
@@ -222,18 +225,14 @@ namespace ContosoFlowers.Dialogs
             context.Done(order);
         }
 
-        private bool EmailValid(string email)
-        {
-            return email.Count(c => c == '@') == 1 && email.Count(c => c == '.') == 1;
-        }
-
         private async Task ConnectToOperator(IDialogContext context, string message)
         {
-            await context.SayAsync(message);
+//            await context.SayAsync(message);
             
             var data = JObject.Parse(@"{ ""Activity"": ""Forward"" }");
             var act = context.MakeMessage();
             act.ChannelData = data;
+            act.Text = message;
             await context.PostAsync(act);
         }
         

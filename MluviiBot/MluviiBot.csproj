@@ -186,6 +186,7 @@
     <Compile Include="BLL\CRMService.cs" />
     <Compile Include="BLL\FakeCrmService.cs" />
     <Compile Include="BLL\ICRMService.cs" />
+    <Compile Include="BLL\ValidationUtils.cs" />
     <Compile Include="Contracts\InsuranceDemand.cs" />
     <Compile Include="Dialogs\InsurancePackageDialog.cs" />
     <Compile Include="MluviiBotModule.cs" />
