@@ -28,6 +28,7 @@
             {
                 builder.RegisterModule(new ReflectionSurrogateModule());
                 builder.RegisterModule<MluviiBotModule>();
+                builder.RegisterModule<GlobalMessageHandlersBotModule>();
                 builder.RegisterControllers(typeof(WebApiApplication).Assembly);
             });
 
