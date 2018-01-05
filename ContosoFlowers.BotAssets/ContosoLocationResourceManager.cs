@@ -23,5 +23,7 @@
         public override string ResetPrompt => "Dobře začínáme znovu";
         public override string StreetAddress => "Adresa";
         public override string TitleSuffix => "Napište svou adresu";
+        public override string AskForTemplate => " Ještě mi chybí: {0}.";
+        public override string ConfirmationPositiveResponses => "ano, jo, spravne, správně, je";
     }
 }
