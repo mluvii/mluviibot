@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
-using ContosoFlowers.BotAssets;
 using MluviiBot.Services;
-using ContosoFlowers.Services;
 using Microsoft.Bot.Builder.ConnectorEx;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Location;
 using Microsoft.Bot.Connector;
 using MluviiBot.BLL;
@@ -74,45 +74,13 @@ namespace MluviiBot.Dialogs
 
         private void OnProductInterestSelected(IDialogContext context)
         {
-            PromptDialog.Text(context, this.OnNameGiven, "Jaké je Vaše jméno?", RetryText, MaxAttempts);
+            var form = new FormDialog<Person>(new Person(), Person.BuildForm, FormOptions.PromptInStart);
+            context.Call(form, this.OnPersonalDetailsGiven);
         }
 
-        private async Task OnNameGiven(IDialogContext context, IAwaitable<string> result)
+        private async Task OnPersonalDetailsGiven(IDialogContext context, IAwaitable<Person> result)
         {
-            var name = await result;
-            order.CustomerDetails.FirstName = name;
-            PromptDialog.Text(context, this.OnSurnameNameGiven, $"Dobře, {name}, mám to, a příjmení?", RetryText, MaxAttempts);
-        }
-
-        private async Task OnSurnameNameGiven(IDialogContext context, IAwaitable<string> result)
-        {
-            var surname = await result;
-            order.CustomerDetails.LastName = surname;
-            await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Děkuji, takže {order.CustomerDetails.FirstName} {order.CustomerDetails.LastName}"));
-            PromptDialog.Text(context, this.OnPhoneGiven, $"Teď bych potřeboval Vaše telefonní číslo (9 míst)", RetryText, MaxAttempts);
-        }
-        
-        private async Task OnPhoneGiven(IDialogContext context, IAwaitable<string> result)
-        {
-            var phone = await result;
-            if (!ValidationUtils.Validate(phone.Trim(), RegexConstants.NINE_DIGITS))
-            {
-                PromptDialog.Text(context, this.OnPhoneGiven, "Tento telefon nevypadá správně, pište prosím pouze 9 čísel.", RetryText, MaxAttempts);
-                return;
-            }
-            order.CustomerDetails.Phone = long.Parse(phone);
-            PromptDialog.Text(context, this.OnEmailGiven, $"Děkuji, těď Vás poprosím o email.", RetryText, MaxAttempts);
-        }
-
-        private async Task OnEmailGiven(IDialogContext context, IAwaitable<string> result)
-        {
-            var email = await result;
-            if (!ValidationUtils.Validate(email, RegexConstants.EMAIL))
-            {
-                PromptDialog.Text(context, this.OnEmailGiven, "Tento email nevypadá správně, zkuste to prosím znovu.", RetryText, MaxAttempts);
-                return;
-            }
-            order.CustomerDetails.Email = email;
+            order.CustomerDetails = await result;
             await context.SayAsync("Děkuji");
             
             // BotBuilder's LocationDialog
@@ -122,7 +90,7 @@ namespace MluviiBot.Dialogs
                 {
                     { "prompt", "" },
                     { "channelId", context.Activity.ChannelId },
-                    { "options", LocationOptions.SkipFavorites | LocationOptions.SkipFinalConfirmation },
+                    { "options", LocationOptions.SkipFavorites },
                 });
 
             context.Call(locationDialog, this.AfterLocation);
@@ -131,8 +99,8 @@ namespace MluviiBot.Dialogs
         private async Task AfterLocation(IDialogContext context, IAwaitable<Place> result)
         {
             var place = await result;
-            order.BillingAddress = place.Address.FormattedAddress;
-            
+//            order.BillingAddress = place.Address.FormattedAddress;
+            order.BillingAddress = $"{place?.Address.StreetAddress}, {place?.Address.Locality} {place?.Address.PostalCode}, {place?.Address.Country}";
             var reply = context.MakeMessage();
 
             var options = new[]
