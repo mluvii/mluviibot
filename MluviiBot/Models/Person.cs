@@ -1,8 +1,9 @@
 ﻿using System;
 using ContosoFlowers.BotAssets;
 using Microsoft.Bot.Builder.FormFlow;
+using MluviiBot.BotAssets;
 
-namespace ContosoFlowers.Models
+namespace MluviiBot.Models
 {
     [Serializable]
     public class Person

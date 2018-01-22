@@ -1,13 +1,13 @@
-﻿namespace ContosoFlowers.Controllers
-{
-    using System;
-    using System.Threading.Tasks;
-    using System.Web.Mvc;
-    using Microsoft.Bot.Builder.ConnectorEx;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Services;
-    using Services.Models;
+﻿using System;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using MluviiBot.Services;
+using MluviiBot.Services.Models;
+using Microsoft.Bot.Builder.ConnectorEx;
+using Microsoft.Bot.Builder.Dialogs;
 
+namespace MluviiBot.Controllers
+{
     [RoutePrefix("CheckOut")]
     [RequireHttps]
     public class CheckOutController : Controller

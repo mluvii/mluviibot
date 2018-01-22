@@ -1,19 +1,17 @@
-﻿using MluviiBot.BLL;
+﻿using System.Configuration;
+using Autofac;
+using MluviiBot.Services.Models;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Location;
+using Microsoft.Bot.Builder.Scorables;
+using Microsoft.Bot.Connector;
+using MluviiBot.BotAssets;
+using MluviiBot.BotAssets.Dialogs;
+using MluviiBot.Dialogs;
 
-namespace ContosoFlowers
+namespace MluviiBot
 {
-    using System.Configuration;
-    using Autofac;
-    using BotAssets;
-    using BotAssets.Dialogs;
-    using Dialogs;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Internals.Fibers;
-    using Microsoft.Bot.Builder.Location;
-    using Microsoft.Bot.Builder.Scorables;
-    using Microsoft.Bot.Connector;
-    using Services.Models;
-
     public class MluviiBotModule : Module
     {
         protected override void Load(ContainerBuilder builder)
@@ -25,9 +23,6 @@ namespace ContosoFlowers
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<FakeCrmService>()
-                .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
 
             builder.RegisterType<RootDialog>()
                 .As<IDialog<object>>()
@@ -37,25 +32,13 @@ namespace ContosoFlowers
                 .As<IScorable<IActivity, double>>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<FlowerCategoriesDialog>()
-                .InstancePerDependency();
-
-            builder.RegisterType<BouquetsDialog>()
-                .InstancePerDependency();
-
             builder.RegisterType<SavedAddressDialog>()
               .InstancePerDependency();
 
             builder.RegisterType<SettingsDialog>()
              .InstancePerDependency();
 
-            builder.RegisterType<InsuranceDialog>()
-                .InstancePerDependency();
-
-            builder.RegisterType<PersonDialog>()
-                .InstancePerDependency();
-
-            builder.RegisterType<InsurancePackageDialog>()
+            builder.RegisterType<MluviiDialog>()
                 .InstancePerDependency();
 
             // Location Dialog
@@ -64,22 +47,22 @@ namespace ContosoFlowers
                 .WithParameter("apiKey", ConfigurationManager.AppSettings["MicrosoftBingMapsKey"])
                 .WithParameter("options", LocationOptions.UseNativeControl | LocationOptions.ReverseGeocode)
                 .WithParameter("requiredFields", LocationRequiredFields.StreetAddress | LocationRequiredFields.Locality | LocationRequiredFields.Country)
-                .WithParameter("resourceManager", new ContosoLocationResourceManager())
+                .WithParameter("resourceManager", new MluviiLocationResourceManager())
                 .InstancePerDependency();
 
             // Service dependencies
-            builder.RegisterType<Services.InMemoryOrdersService>()
-                .Keyed<Services.IOrdersService>(FiberModule.Key_DoNotSerialize)
+            builder.RegisterType<MluviiBot.Services.InMemoryOrdersService>()
+                .Keyed<MluviiBot.Services.IOrdersService>(FiberModule.Key_DoNotSerialize)
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<Services.InMemoryBouquetRepository>()
-                .Keyed<Services.IRepository<Bouquet>>(FiberModule.Key_DoNotSerialize)
+            builder.RegisterType<MluviiBot.Services.InMemoryBouquetRepository>()
+                .Keyed<MluviiBot.Services.IRepository<Bouquet>>(FiberModule.Key_DoNotSerialize)
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<Services.InMemoryFlowerCategoriesRepository>()
-                .Keyed<Services.IRepository<FlowerCategory>>(FiberModule.Key_DoNotSerialize)
+            builder.RegisterType<MluviiBot.Services.InMemoryFlowerCategoriesRepository>()
+                .Keyed<MluviiBot.Services.IRepository<FlowerCategory>>(FiberModule.Key_DoNotSerialize)
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

@@ -1,9 +1,8 @@
-﻿namespace ContosoFlowers.Dialogs
-{
-    using System.Collections.Generic;
-    using BotAssets;
-    using BotAssets.Dialogs;
+﻿using System.Collections.Generic;
+using MluviiBot.BotAssets.Dialogs;
 
+namespace MluviiBot.Dialogs
+{
     public interface IMluviiBotDialogFactory : IDialogFactory
     {
         SavedAddressDialog CreateSavedAddressDialog(

@@ -5,10 +5,10 @@ Several chat bots already exists in these platforms using different tools and le
 
 You came across the Microsoft Bot Framework which support a great variety of channels (platforms), programming languages (C# and Node) and supports both state-of-the-art standard bot features and mechanisms to also take advantage of native features (via ChannelData).
 
-[![Deploy to Azure][Deploy Button]][Deploy CSharp/ContosoFlowers]
+[![Deploy to Azure][Deploy Button]][Deploy CSharp/MluviiBot]
 
 [Deploy Button]: https://azuredeploy.net/deploybutton.png
-[Deploy CSharp/ContosoFlowers]: https://azuredeploy.net
+[Deploy CSharp/MluviiBot]: https://azuredeploy.net
 
 ### Prerequisites
 
@@ -19,8 +19,8 @@ The minimum prerequisites to run this sample are:
 #### Rich cards
 Many messaging channels provide the ability to attach richer objects. The Bot Framework has the ability to render rich cards as attachments.
 
-The bot will render a Welcome message upon the first message using a [HeroCard](https://docs.microsoft.com/en-us/bot-framework/dotnet/bot-builder-dotnet-add-rich-card-attachments#add-a-hero-card) attachment within the [`RootDialog.WelcomeMessageAsync` method](ContosoFlowers/Dialogs/RootDialog.cs#L54-L72).
-The sample also includes the [`HeroCardExtensions`](ContosoFlowers.BotAssets/Extensions/HeroCardExtensions.cs) class providing methods to ease the creation of rich cards.
+The bot will render a Welcome message upon the first message using a [HeroCard](https://docs.microsoft.com/en-us/bot-framework/dotnet/bot-builder-dotnet-add-rich-card-attachments#add-a-hero-card) attachment within the [`RootDialog.WelcomeMessageAsync` method](MluviiBot/Dialogs/RootDialog.cs#L54-L72).
+The sample also includes the [`HeroCardExtensions`](MluviiBot.BotAssets/Extensions/HeroCardExtensions.cs) class providing methods to ease the creation of rich cards.
 
 ````C#
 private async Task WelcomeMessageAsync(IDialogContext context)
@@ -48,7 +48,7 @@ private async Task WelcomeMessageAsync(IDialogContext context)
 |![Rich Cards - Hero Card](images/richcards-herocard-emulator.png)|![Rich Cards - Hero Card](images/richcards-herocard-facebook.png)|![Rich Cards - Hero Card](images/richcards-herocard-skype.png)|
 
 Another example of rich card, is the [ReceiptCard](https://docs.microsoft.com/en-us/bot-framework/dotnet/bot-builder-dotnet-add-rich-card-attachments#add-a-receipt-card-to-a-message) which renders differently depending on the messaging channel being supported.
-The receipt card is created in the [`RootDialog.GetReceiptCard` method](ContosoFlowers/Dialogs/RootDialog.cs#L345-L369) and is rendered once the bot's user checkouts an order.
+The receipt card is created in the [`RootDialog.GetReceiptCard` method](MluviiBot/Dialogs/RootDialog.cs#L345-L369) and is rendered once the bot's user checkouts an order.
  
 ````C#
 private Attachment GetReceiptCard()
@@ -86,8 +86,8 @@ private Attachment GetReceiptCard()
 #### Carousel of Cards
 You can send multiple rich card attachments in a single message. On most channels they will be sent as a list of rich cards, but some channels (like Skype and Facebook) can render them as a carousel of rich cards.
 
-Listing categories and product accompanied with a descriptive image is an example of how a Carousel of Cards can be used. The [`FlowerCategoriesDialog`](ContosoFlowers/Dialogs/FlowerCategoriesDialog.cs) and the [`BouquetsDialog`](ContosoFlowers/Dialogs/BouquetsDialog.cs) inherits the reusable [`PagedCarouselDialog`](ContosoFlowers.BotAssets/Dialogs/PagedCarouselDialog.cs) class which showcase how a carousel of very rich cards can be created.
-Specifically, the [`PagedCarouselDialog<T>.ShowProducts` method](ContosoFlowers.BotAssets/Dialogs/PagedCarouselDialog.cs#L67-L83) renders an attachments list using the `AttachmentLayoutTypes.Carousel` layout.
+Listing categories and product accompanied with a descriptive image is an example of how a Carousel of Cards can be used. The [`FlowerCategoriesDialog`](MluviiBot/Dialogs/FlowerCategoriesDialog.cs) and the [`BouquetsDialog`](MluviiBot/Dialogs/BouquetsDialog.cs) inherits the reusable [`PagedCarouselDialog`](MluviiBot.BotAssets/Dialogs/PagedCarouselDialog.cs) class which showcase how a carousel of very rich cards can be created.
+Specifically, the [`PagedCarouselDialog<T>.ShowProducts` method](MluviiBot.BotAssets/Dialogs/PagedCarouselDialog.cs#L67-L83) renders an attachments list using the `AttachmentLayoutTypes.Carousel` layout.
 
 ````C#
 protected async Task ShowProducts(IDialogContext context)
@@ -119,23 +119,23 @@ protected async Task ShowProducts(IDialogContext context)
 
 #### Multi-Dialogs Approach
 Dialogs can be composed with other dialogs to maximize reuse, and a dialog context maintains a stack of dialogs active in the conversation.
-In this sample, the main flow is implemented in the [`RootDialog` class](ContosoFlowers/Dialogs/RootDialog.cs) and it is composed of several other classes implementing [`IDialog`](https://docs.microsoft.com/en-us/bot-framework/dotnet/bot-builder-dotnet-dialogs).
+In this sample, the main flow is implemented in the [`RootDialog` class](MluviiBot/Dialogs/RootDialog.cs) and it is composed of several other classes implementing [`IDialog`](https://docs.microsoft.com/en-us/bot-framework/dotnet/bot-builder-dotnet-dialogs).
 
 > You can also see a full sample bot showing different kind of dialogs in the [Multi-Dialog Bot Sample](../core-MultiDialogs).
 
 #### Creating Reusable Components
-As seen in the two examples above, you can reuse your dialogs in different segments of the bot's flow, or even different bots, and extract them into a library. An example of this is the [ContosoFlowers.BotAssets project](ContosoFlowers.BotAssets) which includes several reusable dialogs and extension methods.
+As seen in the two examples above, you can reuse your dialogs in different segments of the bot's flow, or even different bots, and extract them into a library. An example of this is the [MluviiBot.BotAssets project](MluviiBot.BotAssets) which includes several reusable dialogs and extension methods.
 
 - Contoso Flowers' Dialogs
-    - [PagedCarouselDialog](ContosoFlowers.BotAssets/Dialogs/PagedCarouselDialog.cs)
-    - [PromptStringRegex](ContosoFlowers.BotAssets/Dialogs/PromptStringRegex.cs)
-    - [SavedAddressDialog](ContosoFlowers.BotAssets/Dialogs/SavedAddressDialog.cs)
+    - [PagedCarouselDialog](MluviiBot.BotAssets/Dialogs/PagedCarouselDialog.cs)
+    - [PromptStringRegex](MluviiBot.BotAssets/Dialogs/PromptStringRegex.cs)
+    - [SavedAddressDialog](MluviiBot.BotAssets/Dialogs/SavedAddressDialog.cs)
 - Extensions
-    - [HeroCardExtensions](ContosoFlowers.BotAssets/Extensions/HeroCardExtensions.cs)
-    - [IBotDataBagExtensions](ContosoFlowers.BotAssets/Extensions/IBotDataBagExtensions.cs)
+    - [HeroCardExtensions](MluviiBot.BotAssets/Extensions/HeroCardExtensions.cs)
+    - [IBotDataBagExtensions](MluviiBot.BotAssets/Extensions/IBotDataBagExtensions.cs)
 
 Additionally, the [Bing Location Control](https://github.com/Microsoft/BotBuilder-Location) is being used to resolve and validate the shipping and billing addresses, backed by Bing Maps REST services.
-Take a look [here](ContosoFlowers/ContosoFlowersModule.cs#L46-L53) to see how to leverage DI to configure the control, and [here](ContosoFlowers/Dialogs/RootDialog.cs#L82-L91) to see how to use the DialogFactory to create an instance of the Control's Location Dialog.
+Take a look [here](MluviiBot/MluviiBotModule.cs#L46-L53) to see how to leverage DI to configure the control, and [here](MluviiBot/Dialogs/RootDialog.cs#L82-L91) to see how to use the DialogFactory to create an instance of the Control's Location Dialog.
 
 | Emulator | Facebook | Skype |
 |----------|-------|----------|
@@ -144,8 +144,8 @@ Take a look [here](ContosoFlowers/ContosoFlowersModule.cs#L46-L53) to see how to
 #### Complex Forms
 Handling a guided conversation like ordering a bouquet of flowers for your loved one can require a lot of effort. In order to simplify building guided conversations the Bot Framework provides a powerful dialog building block known as [FormFlow](https://docs.microsoft.com/en-us/bot-framework/dotnet/bot-builder-dotnet-formflow). A FormFlow dialog guides the user through filling in the form; a collection of fields that you want to fill in through a conversation with the user.
 
-In this sample, the [`Order` class](ContosoFlowers/Models/Order.cs) serves as the model that holds the Form values entered by the user. You can see several `Prompt` and `Pattern` attributes decorating properties which helps customizing the FormFlow behavior.
-Included in the class, there's a static [`BuildOrderForm` method](ContosoFlowers/Models/Order.cs#L68-L101) that uses a `FormBuilder` to build your form. Follow this approach for maximum flexibility which allow specifying each fields behavior as needed.
+In this sample, the [`Order` class](MluviiBot/Models/Order.cs) serves as the model that holds the Form values entered by the user. You can see several `Prompt` and `Pattern` attributes decorating properties which helps customizing the FormFlow behavior.
+Included in the class, there's a static [`BuildOrderForm` method](MluviiBot/Models/Order.cs#L68-L101) that uses a `FormBuilder` to build your form. Follow this approach for maximum flexibility which allow specifying each fields behavior as needed.
 
 ````C#
 public static IForm<Order> BuildOrderForm()
@@ -184,7 +184,7 @@ public static IForm<Order> BuildOrderForm()
 }
 ````
 
-Finally, is worth mention how this is all combined into an Order `FormDialog` called from the main [RootDialog](ContosoFlowers/Dialogs/RootDialog.cs#L142-L143).
+Finally, is worth mention how this is all combined into an Order `FormDialog` called from the main [RootDialog](MluviiBot/Dialogs/RootDialog.cs#L142-L143).
 
 ````C#
 var orderForm = new FormDialog<Models.Order>(this.order, Models.Order.BuildOrderForm, FormOptions.PromptInStart);
@@ -197,7 +197,7 @@ context.Call(orderForm, this.AfterOrderForm);
 
 #### Localization
 Once you have a great bot working in a single language, you might want to enable it in other languages. The localization language is determined by the current thread's `CurrentUICulture` and `CurrentCulture`. By default the culture comes from the Language field of the current message, but you can change that if you wish.
-However, you'll notice there's almost no literal strings in the code that reach the user and they were all moved to a [`Resources` file](ContosoFlowers/Properties/Resources.resx) This is a good practice since you'll probably want to adapt the messages without changing the conversation's flow. An example of this is the previously highlighted `WelcomeMessageAsync` method.
+However, you'll notice there's almost no literal strings in the code that reach the user and they were all moved to a [`Resources` file](MluviiBot/Properties/Resources.resx) This is a good practice since you'll probably want to adapt the messages without changing the conversation's flow. An example of this is the previously highlighted `WelcomeMessageAsync` method.
 
 ````C#
 private async Task WelcomeMessageAsync(IDialogContext context)
@@ -225,7 +225,7 @@ On the other hand, the Bot Framework provides built-in localization for PromptDi
 
 > The static strings in a form include strings that are generated from the information in your C# class and from the strings you supply as prompts, templates, messages or confirmations. It does not include strings generated from built-in templates since those are already localized. Since many strings are automatically generated, it is not easy to use normal C# resource strings directly.
 
-This sample includes the [ContosoFlowers.Models.Order.resx](ContosoFlowers/Properties/ContosoFlowers.Models.Order.resx) FormFlow resource file for the `Orders` form. This file was generated with the supplied rview tool included in the NuGet package.
+This sample includes the [MluviiBot.Models.Order.resx](MluviiBot/Properties/MluviiBot.Models.Order.resx) FormFlow resource file for the `Orders` form. This file was generated with the supplied rview tool included in the NuGet package.
 
 ![Localization Resources](images/localization-resources.png)
 
@@ -241,7 +241,7 @@ ConversationData | Remembering context data associated with a conversation.
 PrivateConversationData | Remembering context data associated with a user in a conversation.
 UserData | Remembering context data associated with a user (across all channels and conversations).
 
-In this sample, the `UserData` property is used to store and retrieve several user settings. The best example is the [`SettingsDialog`](ContosoFlowers/Dialogs/SettingsDialog.cs) which main purpose is to manage this user data.
+In this sample, the `UserData` property is used to store and retrieve several user settings. The best example is the [`SettingsDialog`](MluviiBot/Dialogs/SettingsDialog.cs) which main purpose is to manage this user data.
 
 | Emulator | Facebook | Skype |
 |----------|-------|----------|
@@ -251,7 +251,7 @@ In this sample, the `UserData` property is used to store and retrieve several us
 
 #### Globally Available Commands
 Additionally, you'll notice the `SettingsDialog` is globally available meaning that the user can type `settings` anytime and the settings dialog will be taken on top of the conversation's dialog stack.
-The [`SettingsScorable`](ContosoFlowers/Dialogs/SettingsScorable.cs) makes this action globally available because a piece of middleware inspects every incoming message and gives all IScorable implementations the opportunity to intercept the message and manipulate the conversation stack, interrupting the normal dialog flow.
+The [`SettingsScorable`](MluviiBot/Dialogs/SettingsScorable.cs) makes this action globally available because a piece of middleware inspects every incoming message and gives all IScorable implementations the opportunity to intercept the message and manipulate the conversation stack, interrupting the normal dialog flow.
 
 | Emulator | Facebook | Skype |
 |----------|-------|----------|
@@ -259,13 +259,13 @@ The [`SettingsScorable`](ContosoFlowers/Dialogs/SettingsScorable.cs) makes this 
 
 #### Dependency Injection
 To ease unit testing of Dialogs and other components the Bot Framework leverages [Autofac](https://autofac.org/) for Dependency Injection. The top level composition root class `Conversation` provides the Autofac `IContainer Container`  property for registering a resolving components.
-Additionally, as a good practice, you can create and register app-specific [Autofac Modules](http://docs.autofac.org/en/latest/configuration/modules.html). For instance, all dialogs and services as well as the `IScorable` implementation are registered in the [`ContosoFlowersModule`](ContosoFlowers/ContosoFlowersModule.cs) .
+Additionally, as a good practice, you can create and register app-specific [Autofac Modules](http://docs.autofac.org/en/latest/configuration/modules.html). For instance, all dialogs and services as well as the `IScorable` implementation are registered in the [`MluviiBotModule`](MluviiBot/MluviiBotModule.cs) .
 
 > Because all components are serialized to the per-user, per-conversation IBotDataBag all classes must be marked with the serializable attribute. The cleanest solution to reference non-serializable services is to resolve the dependency through Autofac and `FiberModule.Key_DoNotSerialize`.
 
 ````C#
-builder.RegisterType<ContosoFlowersDialogFactory>()
-    .Keyed<IContosoFlowersDialogFactory>(FiberModule.Key_DoNotSerialize)
+builder.RegisterType<MluviiBotDialogFactory>()
+    .Keyed<IMluviiBotDialogFactory>(FiberModule.Key_DoNotSerialize)
     .AsImplementedInterfaces()
     .InstancePerLifetimeScope();
 
@@ -282,7 +282,7 @@ builder.RegisterType<SettingsScorable>()
 The exchange of messages between bot and user through a channel (e.g. Facebook Messenger, Skype, Slack) is the primary means of interaction. However, in some scenario the bot is waiting for an event that occurs in an external component.
 For example, the passing of time, an external authentication provider (e.g. OAuth scenarios) or an external payment service. In such cases, the `ResumptionCookie` has the information necessary to resume the conversation.
 
-In this sample, the user proceed to checkout an order browsing a url provided by the bot. This url includes an encoded version of the ResumptionCookie (using the `ResumptionCookie.GZipSerialize` helper method) generated in the [`RootDialog.BuildCheckoutUrl` method](ContosoFlowers/Dialogs/RootDialog.cs#L272-L260).
+In this sample, the user proceed to checkout an order browsing a url provided by the bot. This url includes an encoded version of the ResumptionCookie (using the `ResumptionCookie.GZipSerialize` helper method) generated in the [`RootDialog.BuildCheckoutUrl` method](MluviiBot/Dialogs/RootDialog.cs#L272-L260).
 
 ````C#
 private string BuildCheckoutUrl(string orderID)
@@ -300,7 +300,7 @@ private string BuildCheckoutUrl(string orderID)
 }
 ````
 
-Once the user browse the checkout page and process the payment, the `ResumptionCookie` included in the url is then decoded (using the `ResumptionCookie.GZipDeserialize` method) and used to resume the conversation with the bot. You can check the [`CheckOutController.Index` action](ContosoFlowers/Controllers/CheckOutController.cs#L43-L56) calling the `Conversation.ResumeAsync` method.
+Once the user browse the checkout page and process the payment, the `ResumptionCookie` included in the url is then decoded (using the `ResumptionCookie.GZipDeserialize` method) and used to resume the conversation with the bot. You can check the [`CheckOutController.Index` action](MluviiBot/Controllers/CheckOutController.cs#L43-L56) calling the `Conversation.ResumeAsync` method.
 
 ````C#
 [Route("")]

@@ -1,7 +1,7 @@
-﻿namespace ContosoFlowers
-{
-    using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
+namespace MluviiBot
+{
     public class FilterConfig
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)

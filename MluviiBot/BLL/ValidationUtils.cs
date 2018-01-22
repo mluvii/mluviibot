@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ContosoFlowers.BLL
+namespace MluviiBot.BLL
 {
     public class ValidationUtils
     {

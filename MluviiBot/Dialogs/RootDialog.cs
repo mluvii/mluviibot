@@ -1,25 +1,15 @@
-﻿using MluviiBot.BLL;
+﻿
+using System;
+using System.Threading.Tasks;
+using MluviiBot.Services;
+using Microsoft.Bot.Builder.ConnectorEx;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
+using MluviiBot.BotAssets.Extensions;
+using MluviiBot.Properties;
 
-namespace ContosoFlowers.Dialogs
+namespace MluviiBot.Dialogs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Threading.Tasks;
-    using System.Web;
-    using AutoMapper;
-    using BotAssets.Dialogs;
-    using BotAssets.Extensions;
-    using Microsoft.Bot.Builder.ConnectorEx;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.FormFlow;
-    using Microsoft.Bot.Builder.Location;
-    using Microsoft.Bot.Connector;
-    using Models;
-    using Properties;
-    using Services;
-    using Services.Models;
-
     [Serializable]
     public class RootDialog : IDialog<object>
     {
@@ -39,7 +29,7 @@ namespace ContosoFlowers.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            context.Call(this.dialogFactory.Create<InsuranceDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
+            context.Call(this.dialogFactory.Create<MluviiDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -74,7 +64,7 @@ namespace ContosoFlowers.Dialogs
             await context.PostAsync(reply);
             
 
-            context.Call(this.dialogFactory.Create<InsuranceDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
+            context.Call(this.dialogFactory.Create<MluviiDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
         }
 
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)

@@ -11,7 +11,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ContosoFlowers</RootNamespace>
+    <RootNamespace>MluviiBot</RootNamespace>
     <AssemblyName>MluviiBot</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
@@ -68,9 +68,6 @@
     </Reference>
     <Reference Include="Microsoft.Bot.Builder.Autofac, Version=3.12.2.4, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bot.Builder.3.12.2.4\lib\net46\Microsoft.Bot.Builder.Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Bot.Builder.Location, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\Mluvii.Bot.Builder.Location.Private.Fork.0.0.2-rc\lib\net46\Microsoft.Bot.Builder.Location.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bot.Connector, Version=3.12.2.4, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bot.Connector.3.12.2.4\lib\net46\Microsoft.Bot.Connector.dll</HintPath>
@@ -182,31 +179,24 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="BLL\CRMService.cs" />
-    <Compile Include="BLL\FakeCrmService.cs" />
-    <Compile Include="BLL\ICRMService.cs" />
     <Compile Include="BLL\ValidationUtils.cs" />
-    <Compile Include="Contracts\InsuranceDemand.cs" />
-    <Compile Include="Dialogs\InsurancePackageDialog.cs" />
+    <Compile Include="Dialogs\HelpDialog.cs" />
     <Compile Include="MluviiBotModule.cs" />
     <Compile Include="Contracts\CRMPerson.cs" />
     <Compile Include="Controllers\CheckOutController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
-    <Compile Include="Dialogs\InsuranceDialog.cs" />
-    <Compile Include="Dialogs\PersonDialog.cs" />
+    <Compile Include="Dialogs\MluviiDialog.cs" />
     <Compile Include="Dialogs\SettingsDialog.cs" />
     <Compile Include="Dialogs\SettingsScorable.cs" />
     <Compile Include="Dialogs\MluviiBotDialogFactory.cs" />
     <Compile Include="Dialogs\IMluviiBotDialogFactory.cs" />
-    <Compile Include="Dialogs\BouquetsDialog.cs" />
-    <Compile Include="Dialogs\FlowerCategoriesDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\UserPreferences.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\UserPreferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -234,13 +224,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ContosoFlowers.BotAssets\ContosoFlowers.BotAssets.csproj">
-      <Project>{4010e1d2-220e-44ca-9259-92b1b2acc794}</Project>
-      <Name>ContosoFlowers.BotAssets</Name>
+    <ProjectReference Include="..\..\BotBuilder-Location\CSharp\BotBuilderLocation\BotBuilderLocation.csproj">
+      <Project>{3cc3a7f1-cb7c-4c05-86ea-70b99c113fad}</Project>
+      <Name>BotBuilderLocation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ContosoFlowers.Services\ContosoFlowers.Services.csproj">
+    <ProjectReference Include="..\MluviiBot.BotAssets\MluviiBot.BotAssets.csproj">
+      <Project>{4010e1d2-220e-44ca-9259-92b1b2acc794}</Project>
+      <Name>MluviiBot.BotAssets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MluviiBot.Services\MluviiBot.Services.csproj">
       <Project>{2abdf0fc-7533-41b0-b530-3003d4d2ef4e}</Project>
-      <Name>ContosoFlowers.Services</Name>
+      <Name>MluviiBot.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniqaFlowers\UniqaFlowers.csproj">
       <Project>{781c4c08-8716-4594-8115-fdcc0726d9cf}</Project>
@@ -248,7 +242,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\ContosoFlowers.Models.Order.resx" />
+    <EmbeddedResource Include="Properties\MluviiBot.Models.Order.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

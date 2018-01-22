@@ -1,18 +1,17 @@
-﻿namespace ContosoFlowers
-{
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using Autofac;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Dialogs.Internals;
-    using Microsoft.Bot.Connector;
-    using Properties;
-    using ContosoFlowers.BotAssets.Extensions;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
+using Autofac;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Internals;
+using Microsoft.Bot.Connector;
+using MluviiBot.BotAssets.Extensions;
 
+namespace MluviiBot.Controllers
+{
     [BotAuthentication]
     public class MessagesController : ApiController
     {

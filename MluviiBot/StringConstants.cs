@@ -1,4 +1,4 @@
-﻿namespace ContosoFlowers
+﻿namespace MluviiBot
 {
     public static class StringConstants
     {

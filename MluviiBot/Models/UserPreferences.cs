@@ -1,8 +1,8 @@
-﻿namespace ContosoFlowers.Models
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace MluviiBot.Models
+{
     [Serializable]
     public class UserPreferences
     {

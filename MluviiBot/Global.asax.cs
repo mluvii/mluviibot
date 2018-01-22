@@ -1,21 +1,21 @@
-﻿namespace ContosoFlowers
-{
-    using System.Web.Http;
-    using System.Web.Mvc;
-    using System.Web.Routing;
-    using Autofac;
-    using Autofac.Integration.Mvc;
-    using AutoMapper;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Internals.Fibers;
+﻿using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Routing;
+using Autofac;
+using Autofac.Integration.Mvc;
+using AutoMapper;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Internals.Fibers;
 
+namespace MluviiBot
+{
     public class WebApiApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
         {
             this.RegisterBotDependencies();
 
-            Mapper.Initialize(cfg => cfg.CreateMap<Models.Order, Services.Models.Order>());
+            Mapper.Initialize(cfg => cfg.CreateMap<Models.Order, MluviiBot.Services.Models.Order>());
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

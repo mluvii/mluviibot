@@ -1,19 +1,19 @@
-﻿namespace ContosoFlowers.Dialogs
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Threading.Tasks;
-    using BotAssets;
-    using BotAssets.Dialogs;
-    using BotAssets.Extensions;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Internals.Fibers;
-    using Microsoft.Bot.Builder.Location;
-    using Microsoft.Bot.Connector;
-    using Models;
-    using Properties;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Location;
+using Microsoft.Bot.Connector;
+using MluviiBot.BotAssets;
+using MluviiBot.BotAssets.Dialogs;
+using MluviiBot.BotAssets.Extensions;
+using MluviiBot.Models;
+using MluviiBot.Properties;
 
+namespace MluviiBot.Dialogs
+{
     [Serializable]
     public class SettingsDialog : IDialog<object>
     {

@@ -1,14 +1,14 @@
-﻿namespace ContosoFlowers.Dialogs
-{
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Dialogs.Internals;
-    using Microsoft.Bot.Builder.Internals.Fibers;
-    using Microsoft.Bot.Builder.Scorables;
-    using Microsoft.Bot.Connector;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Internals;
+using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Scorables;
+using Microsoft.Bot.Connector;
 
+namespace MluviiBot.Dialogs
+{
     public class SettingsScorable : IScorable<IActivity, double>
     {
         private readonly IDialogTask task;
@@ -24,9 +24,9 @@
         {
             var message = item as IMessageActivity;
 
-            if (message != null && !string.IsNullOrWhiteSpace(message.Text))
+            if (!string.IsNullOrWhiteSpace(message?.Text))
             {
-                if (message.Text.Equals("settings", StringComparison.InvariantCultureIgnoreCase))
+                if (new [] {"pomoc", "zpet", "zpět", "nevim", "co?"}.Contains(message.Text.ToLower()))
                 {
                     return message.Text;
                 }
