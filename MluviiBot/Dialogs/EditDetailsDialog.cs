@@ -13,11 +13,10 @@ using MluviiBot.Properties;
 
 namespace MluviiBot.Dialogs
 {
-    public class EditDetailsDialog: IDialog<Person>
+    public class EditDetailsDialog : IDialog<Person>
     {
         private Person person;
         private readonly IMluviiBotDialogFactory dialogFactory;
-
 
         public EditDetailsDialog(IMluviiBotDialogFactory dialogFactory, Person person = null)
         {
@@ -27,14 +26,15 @@ namespace MluviiBot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            var preferencesOptions = new []{
+            var preferencesOptions = new[]
+            {
                 Resources.EditDetailsDialog_option_name,
                 Resources.EditDetailsDialog_option_email,
                 Resources.EditDetailsDialog_option_phone,
                 Resources.EditDetailsDialog_option_address,
                 Resources.CancellableDialog_back,
-            }.Except(new [] {""});
-            
+            };
+
             CancelablePromptChoice<string>.Choice(
                 context,
                 this.ResumeAfterOptionSelected,
@@ -59,7 +59,7 @@ namespace MluviiBot.Dialogs
                     var locationDialog = dialogFactory.Create<LocationDialog>(
                         new Dictionary<string, object>()
                         {
-                            { "channelId", context.Activity.ChannelId }
+                            {"channelId", context.Activity.ChannelId}
                         });
 
                     context.Call(locationDialog, this.OnAddressChanged);
@@ -69,17 +69,19 @@ namespace MluviiBot.Dialogs
                 if (option.Equals(Resources.EditDetailsDialog_option_name, StringComparison.OrdinalIgnoreCase))
                 {
                     person.FirstName = null;
-                    person.LastName= null;
+                    person.LastName = null;
                 }
 
                 if (option.Equals(Resources.EditDetailsDialog_option_email, StringComparison.OrdinalIgnoreCase))
                 {
                     person.Email = null;
                 }
+
                 if (option.Equals(Resources.EditDetailsDialog_option_phone, StringComparison.OrdinalIgnoreCase))
                 {
                     person.Phone = null;
                 }
+
                 var form = new FormDialog<Person>(person, Person.BuildForm, FormOptions.PromptInStart);
                 context.Call(form, OnPersonDetailsChanged);
             }
@@ -92,7 +94,9 @@ namespace MluviiBot.Dialogs
         private async Task OnAddressChanged(IDialogContext context, IAwaitable<Place> result)
         {
             var place = await result;
-            var address = $"{place?.Address.StreetAddress}, {place?.Address.Locality} {place?.Address.PostalCode}, {place?.Address.Country}";;
+            var address =
+                $"{place?.Address.StreetAddress}, {place?.Address.Locality} {place?.Address.PostalCode}, {place?.Address.Country}";
+            ;
             await context.SayAsync($"Adresa byla změněna na {address}");
             person.Address = address;
             AskForMore(context);

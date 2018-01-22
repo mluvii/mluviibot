@@ -55,19 +55,6 @@ namespace MluviiBot.Controllers
                         var dialog = scope.Resolve<IDialog<object>>();
                         await Conversation.SendAsync(message, () => dialog);
                     }
-//                    var options = new[]
-//                    {
-//                        "Zájem o produkt",
-//                        "Pouze dotaz",
-//                    };
-//                    reply.AddHeroCard(
-//                        "Dobrý den, jak Vám mohu pomoci?",
-//                        "",
-//                        options,
-//                        new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
-//                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
-
-//                    await connector.Conversations.ReplyToActivityAsync(reply);
                 }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
@@ -81,10 +68,6 @@ namespace MluviiBot.Controllers
             }
             else if (message.Type == ActivityTypes.Ping)
             {
-            }
-            else if (message.Type == ActivityTypes.DeleteUserData)
-            {
-                
             }
         }
     }

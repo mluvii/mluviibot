@@ -15,8 +15,6 @@ namespace MluviiBot
         {
             this.RegisterBotDependencies();
 
-            Mapper.Initialize(cfg => cfg.CreateMap<Models.Order, MluviiBot.Services.Models.Order>());
-
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

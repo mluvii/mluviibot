@@ -1,6 +1,5 @@
 ﻿using System.Configuration;
 using Autofac;
-using MluviiBot.Services.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Location;
