@@ -33,10 +33,10 @@ namespace MluviiBot.Dialogs
                     Resources.HelpDialog_start_over,
                     Resources.HelpDialog_connect_operator,
                     person != null ? Resources.HelpDialog_edit_details : "",
-                    Resources.CancellableDialog_back,
+                Resources.CancellableDialog_back,
                 }.Except(new [] {""});
             
-            CancelablePromptChoice<string>.Choice(
+            PromptDialog.Choice(
                 context,
                 this.ResumeAfterOptionSelected,
                 preferencesOptions,
@@ -46,12 +46,6 @@ namespace MluviiBot.Dialogs
         private async Task ResumeAfterOptionSelected(IDialogContext context, IAwaitable<string> result)
         {
             var option = await result;
-
-            if (option == null)
-            {
-                context.Done<object>(null);
-                return;
-            }
 
             if (option.Equals(Resources.HelpDialog_start_over, StringComparison.OrdinalIgnoreCase))
             {
@@ -65,9 +59,15 @@ namespace MluviiBot.Dialogs
             }
             if (option.Equals(Resources.HelpDialog_edit_details, StringComparison.OrdinalIgnoreCase))
             {
-                context.Call(this.dialogFactory.Create<EditDetailsDialog>(), OnPersonDetailsEdited);
+                context.Call(this.dialogFactory.Create<EditDetailsDialog, Person>(person), OnPersonDetailsEdited);
                 return;
             }
+            if (option.Equals(Resources.CancellableDialog_back, StringComparison.OrdinalIgnoreCase))
+            {
+                context.Done<object>(null);
+                return;
+            }
+            await StartAsync(context);
         }
 
         private async Task OnPersonDetailsEdited(IDialogContext context, IAwaitable<Person> result)
