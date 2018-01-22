@@ -23,20 +23,9 @@ namespace MluviiBot.Controllers
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                //The Configured IISExpressSSLPort property in this project file
-                const int ConfiguredHttpsPort = 44371;
-
-                var link = Url.Link("CheckOut", new { controller = "CheckOut", action = "Index" });
-                var uriBuilder = new UriBuilder(link)
-                {
-                    Scheme = Uri.UriSchemeHttps,
-                    Port = ConfiguredHttpsPort
-                };
-                var checkOutRouteUri = uriBuilder.Uri.ToString();
-
                 using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, activity))
                 {
-                    var dialog = scope.Resolve<IDialog<object>>(TypedParameter.From(checkOutRouteUri));
+                    var dialog = scope.Resolve<IDialog<object>>();
                     await Conversation.SendAsync(activity, () => dialog);
                 }
             }

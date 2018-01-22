@@ -13,23 +13,19 @@ namespace MluviiBot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<object>
     {
-        private readonly string checkoutUriFormat;
         private readonly IMluviiBotDialogFactory dialogFactory;
-        private readonly IOrdersService ordersService;
 
         private Models.Order order;
         private ConversationReference conversationReference;
         
-        public RootDialog(string checkoutUriFormat, IMluviiBotDialogFactory dialogFactory, IOrdersService ordersService)
+        public RootDialog(IMluviiBotDialogFactory dialogFactory)
         {
-            this.checkoutUriFormat = checkoutUriFormat;
             this.dialogFactory = dialogFactory;
-            this.ordersService = ordersService;
         }
 
         public async Task StartAsync(IDialogContext context)
         {
-            context.Call(this.dialogFactory.Create<MluviiDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
+            context.Call(this.dialogFactory.Create<MluviiDialog>(), this.AfterOrderCompleted);
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -64,7 +60,7 @@ namespace MluviiBot.Dialogs
             await context.PostAsync(reply);
             
 
-            context.Call(this.dialogFactory.Create<MluviiDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
+            context.Call(this.dialogFactory.Create<MluviiDialog>(), this.AfterOrderCompleted);
         }
 
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)

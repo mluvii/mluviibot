@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace MluviiBot.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -85,11 +88,65 @@ namespace MluviiBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zpět.
+        /// </summary>
+        internal static string CancellableDialog_back {
+            get {
+                return ResourceManager.GetString("CancellableDialog_back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ClientGUID.
         /// </summary>
         internal static string ClientID_Key {
             get {
                 return ResourceManager.GetString("ClientID_Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adresa.
+        /// </summary>
+        internal static string EditDetailsDialog_option_address {
+            get {
+                return ResourceManager.GetString("EditDetailsDialog_option_address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        internal static string EditDetailsDialog_option_email {
+            get {
+                return ResourceManager.GetString("EditDetailsDialog_option_email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jméno.
+        /// </summary>
+        internal static string EditDetailsDialog_option_name {
+            get {
+                return ResourceManager.GetString("EditDetailsDialog_option_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telefon.
+        /// </summary>
+        internal static string EditDetailsDialog_option_phone {
+            get {
+                return ResourceManager.GetString("EditDetailsDialog_option_phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Který údaj si přejete změnit.
+        /// </summary>
+        internal static string EditDetailsDialogDialog_prompt {
+            get {
+                return ResourceManager.GetString("EditDetailsDialogDialog_prompt", resourceCulture);
             }
         }
         
@@ -121,11 +178,56 @@ namespace MluviiBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spojit se s operátorem.
+        /// </summary>
+        internal static string HelpDialog_connect_operator {
+            get {
+                return ResourceManager.GetString("HelpDialog_connect_operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Změnit své údaje.
+        /// </summary>
+        internal static string HelpDialog_edit_details {
+            get {
+                return ResourceManager.GetString("HelpDialog_edit_details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vypadá to, že si nevíte rady, veberte jednu z možností..
+        /// </summary>
+        internal static string HelpDialog_Prompt {
+            get {
+                return ResourceManager.GetString("HelpDialog_Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Začít znovu.
+        /// </summary>
+        internal static string HelpDialog_start_over {
+            get {
+                return ResourceManager.GetString("HelpDialog_start_over", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What&apos;s the {&amp;}?.
         /// </summary>
         internal static string Order_RecipientFirstName_Prompt {
             get {
                 return ResourceManager.GetString("Order_RecipientFirstName_Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person.
+        /// </summary>
+        internal static string Person_Key {
+            get {
+                return ResourceManager.GetString("Person_Key", resourceCulture);
             }
         }
         

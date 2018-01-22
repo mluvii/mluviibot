@@ -10,7 +10,7 @@ namespace MluviiBot.BotAssets.Dialogs
     [Serializable]
     public class CancelablePromptChoice<T> : PromptDialog.PromptChoice<T>
     {
-        private static IEnumerable<string> cancelTerms = new[] { "Cancel", "Back", "B", "Abort", "Zpět", "Zpet", "Zpátky", "Zrušit", "Zpatky", "Zrusit" };
+        private static IEnumerable<string> cancelTerms = new[] { "Cancel", "Back", "B", "Abort", "Zpět", "Zpet", "Zpátky", "Zrušit", "Zpatky", "Zrusit", "Vrátit", "Návrat" };
 
         private new readonly CancelablePromptOptions<T> promptOptions;
 

@@ -23,48 +23,36 @@ namespace MluviiBot
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
-
             builder.RegisterType<RootDialog>()
                 .As<IDialog<object>>()
                 .InstancePerDependency();
-
-            builder.RegisterType<SettingsScorable>()
-                .As<IScorable<IActivity, double>>()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<SavedAddressDialog>()
-              .InstancePerDependency();
-
-            builder.RegisterType<SettingsDialog>()
-             .InstancePerDependency();
-
+            
             builder.RegisterType<MluviiDialog>()
                 .InstancePerDependency();
 
+
+            builder.RegisterType<EditDetailsDialog>()
+             .InstancePerDependency();
+
+            builder.RegisterType<HandoverDialog>()
+             .InstancePerDependency();
+
+            builder.RegisterType<HelpDialog>()
+                .InstancePerDependency();
+
+            builder.RegisterType<HelpScorable>()
+                .As<IScorable<IActivity, double>>()
+                .InstancePerLifetimeScope();
+            
             // Location Dialog
             // ctor signature: LocationDialog(string apiKey, string channelId, string prompt, LocationOptions options = LocationOptions.None, LocationRequiredFields requiredFields = LocationRequiredFields.None, LocationResourceManager resourceManager = null);
             builder.RegisterType<LocationDialog>()
                 .WithParameter("apiKey", ConfigurationManager.AppSettings["MicrosoftBingMapsKey"])
-                .WithParameter("options", LocationOptions.UseNativeControl | LocationOptions.ReverseGeocode)
+                .WithParameter("options", LocationOptions.UseNativeControl | LocationOptions.ReverseGeocode | LocationOptions.SkipFavorites)
                 .WithParameter("requiredFields", LocationRequiredFields.StreetAddress | LocationRequiredFields.Locality | LocationRequiredFields.Country)
                 .WithParameter("resourceManager", new MluviiLocationResourceManager())
+                .WithParameter("prompt", "")
                 .InstancePerDependency();
-
-            // Service dependencies
-            builder.RegisterType<MluviiBot.Services.InMemoryOrdersService>()
-                .Keyed<MluviiBot.Services.IOrdersService>(FiberModule.Key_DoNotSerialize)
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<MluviiBot.Services.InMemoryBouquetRepository>()
-                .Keyed<MluviiBot.Services.IRepository<Bouquet>>(FiberModule.Key_DoNotSerialize)
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<MluviiBot.Services.InMemoryFlowerCategoriesRepository>()
-                .Keyed<MluviiBot.Services.IRepository<FlowerCategory>>(FiberModule.Key_DoNotSerialize)
-                .AsImplementedInterfaces()
-                .SingleInstance();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Bot.Builder.FormFlow;
+using Microsoft.Bot.Builder.FormFlow.Advanced;
 using MluviiBot.BotAssets;
 
 namespace MluviiBot.Models
@@ -25,6 +26,9 @@ namespace MluviiBot.Models
         [Template(TemplateUsage.NotUnderstood, "Tento email nevypadá správně, zkuste to prosím znovu.")]
         [Pattern(RegexConstants.Email)]
         public string Email { get; set; }
+        
+        [Optional]
+        public string Address { get; set; }
 
         public static IForm<Person> BuildForm()
         {
@@ -32,6 +36,7 @@ namespace MluviiBot.Models
                 .Field(nameof(FirstName))
                 .Field(nameof(LastName))
                 .Message("Děkuji, takže {FirstName} {LastName}.")
+                .Field(new FieldReflector<Person>(nameof(Address)).SetActive(_  => false))
                 .AddRemainingFields()
                 .Build();
         }

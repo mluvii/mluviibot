@@ -180,10 +180,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BLL\ValidationUtils.cs" />
+    <Compile Include="Dialogs\EditDetailsDialog.cs" />
+    <Compile Include="Dialogs\HandoverDialog.cs" />
     <Compile Include="Dialogs\HelpDialog.cs" />
+    <Compile Include="Dialogs\HelpScorable.cs" />
     <Compile Include="MluviiBotModule.cs" />
     <Compile Include="Contracts\CRMPerson.cs" />
-    <Compile Include="Controllers\CheckOutController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\MluviiDialog.cs" />
     <Compile Include="Dialogs\SettingsDialog.cs" />

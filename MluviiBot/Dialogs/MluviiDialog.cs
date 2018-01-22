@@ -22,53 +22,36 @@ namespace MluviiBot.Dialogs
 {
     public class MluviiDialog: IDialog<Models.Order>
     {
-        private readonly string checkoutUriFormat;
-
         private const string RetryText = "Nerozuměl jsem, můžete mi to napsat ještě jednou?";
         private const int MaxAttempts = 10;
         private ConversationReference conversationReference;
         private Models.Order order;
         private readonly IMluviiBotDialogFactory dialogFactory;
-        private readonly IOrdersService ordersService;
 
 
-        public MluviiDialog(string checkoutUriFormat, IMluviiBotDialogFactory dialogFactory, IOrdersService ordersService)
+        public MluviiDialog(IMluviiBotDialogFactory dialogFactory)
         {
             this.dialogFactory = dialogFactory;
-            this.ordersService = ordersService;
-            this.checkoutUriFormat = checkoutUriFormat;
         }
 
         public async Task StartAsync(IDialogContext context)
         {
+            order = new Order();
             if (!context.UserData.ContainsKey(Resources.ClientID_Key))
                 context.UserData.SetValue(Resources.ClientID_Key, Guid.NewGuid().ToString());
+            
+            if (context.UserData.ContainsKey(Resources.Person_Key))
+            {
+                order.CustomerDetails = context.UserData.GetValue<Person>(Resources.Person_Key);
+            }
+            order.ClientID = context.UserData.GetValue<string>(Resources.ClientID_Key);
+
             context.Wait(this.MessageReceivedAsync);
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var message = await result;
-
-            if (this.conversationReference == null)
-            {
-                this.conversationReference = message.ToConversationReference();
-            }
-            this.order = new Order();
-            order.ClientID = context.UserData.GetValue<string>(Resources.ClientID_Key);
-
-            var lower = message.Text.ToLower();
-            if (lower.Contains("produkt") || lower.Contains("1"))
-            {
-                await context.SayAsync("Děkuji, nyní bych od Vás potřeboval několik údajů:");
-                OnProductInterestSelected(context);
-                return;
-            }
-            if (lower.Contains("dotaz") || lower.Contains("2"))
-            {
-                await ConnectToOperator(context, "Dobře, přepojuji Vás na operátora. Hezký den.");
-                return;
-            }
+            
             PromptDialog.Text(context, async (ctx, res) => await this.MessageReceivedAsync(ctx, new AwaitableFromItem<IMessageActivity>(new Activity() {Text = await res})), "Omlouvám se, nerozuměl jsem. Vyberte prosím z možností 1) Informace o produktu 2) Dotaz", RetryText, MaxAttempts);
         }
 
@@ -81,16 +64,13 @@ namespace MluviiBot.Dialogs
         private async Task OnPersonalDetailsGiven(IDialogContext context, IAwaitable<Person> result)
         {
             order.CustomerDetails = await result;
+            context.UserData.SetValue(Resources.Person_Key, order.CustomerDetails);
             await context.SayAsync("Děkuji");
             
-            // BotBuilder's LocationDialog
-            // Leverage DI to inject other parameters
-            var locationDialog = this.dialogFactory.Create<LocationDialog>(
+            var locationDialog = dialogFactory.Create<LocationDialog>(
                 new Dictionary<string, object>()
                 {
-                    { "prompt", "" },
-                    { "channelId", context.Activity.ChannelId },
-                    { "options", LocationOptions.SkipFavorites },
+                    { "channelId", context.Activity.ChannelId }
                 });
 
             context.Call(locationDialog, this.AfterLocation);
@@ -188,164 +168,11 @@ namespace MluviiBot.Dialogs
 
         private async Task ConnectToOperator(IDialogContext context, string message)
         {
-//            await context.SayAsync(message);
-            
             var data = JObject.Parse(@"{ ""Activity"": ""Forward"" }");
             var act = context.MakeMessage();
             act.ChannelData = data;
             act.Text = message;
             await context.PostAsync(act);
         }
-        
-        private async Task PaymentSelectionAsync(IDialogContext context)
-        {
-            var paymentReply = context.MakeMessage();
-
-            var serviceModel = Mapper.Map<MluviiBot.Services.Models.Order>(this.order);
-            if (this.order.OrderID == null)
-            {
-                this.order.OrderID = this.ordersService.PlacePendingOrder(serviceModel);
-            }
-
-            var checkoutUrl = this.BuildCheckoutUrl(this.order.OrderID);
-            paymentReply.Attachments = new List<Attachment>
-            {
-                new HeroCard()
-                {
-                    Text = string.Format(CultureInfo.CurrentCulture, Resources.RootDialog_Checkout_Prompt, this.order.InsurancePackage.Price.ToString("C")),
-                    Buttons = new List<CardAction>
-                    {
-                        new CardAction(ActionTypes.OpenUrl, Resources.RootDialog_Checkout_Continue, value: checkoutUrl),
-                        new CardAction(ActionTypes.ImBack, Resources.RootDialog_Checkout_Cancel, value: Resources.RootDialog_Checkout_Cancel)
-                    }
-                }.ToAttachment()
-            };
-
-            await context.PostAsync(paymentReply);
-
-            context.Wait(this.AfterPaymentSelection);
-        }
-
-        private string BuildCheckoutUrl(string orderID)
-        {
-            var uriBuilder = new UriBuilder(this.checkoutUriFormat);
-
-            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["orderID"] = orderID;
-            query["botId"] = this.conversationReference.Bot.Id;
-            query["channelId"] = this.conversationReference.ChannelId;
-            query["conversationId"] = this.conversationReference.Conversation.Id;
-            query["serviceUrl"] = this.conversationReference.ServiceUrl;
-            query["userId"] = this.conversationReference.User.Id;
-
-            uriBuilder.Query = query.ToString();
-            var checkoutUrl = uriBuilder.Uri.ToString();
-
-            return checkoutUrl;
-        }
-
-        private async Task AfterPaymentSelection(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var selection = await result;
-
-            if (selection.Text == Resources.RootDialog_Checkout_Cancel)
-            {
-                var options = new[] { Resources.RootDialog_Menu_StartOver, Resources.RootDialog_Menu_Cancel, Resources.RootDialog_Welcome_Support };
-                PromptDialog.Choice(context, this.AfterChangedMyMind, options, Resources.RootDialog_Menu_Prompt);
-            }
-            else
-            {
-                var serviceOrder = this.ordersService.RetrieveOrder(selection.Text);
-                if (serviceOrder == null || !serviceOrder.Payed)
-                {
-                    await context.PostAsync(string.Format(CultureInfo.CurrentCulture, Resources.RootDialog_Checkout_Error, selection.Text));
-                    await this.PaymentSelectionAsync(context);
-                    return;
-                }
-
-                var message = context.MakeMessage();
-                message.Text = string.Format(
-                    CultureInfo.CurrentCulture,
-                    Resources.RootDialog_Receipt_Text,
-                    selection.Text,
-                    this.order.InsurancePackage.Name,
-                    this.order.CustomerDetails.FirstName,
-                    this.order.CustomerDetails.LastName,
-                    "");
-                message.Attachments.Add(this.GetReceiptCard());
-
-                await context.PostAsync(string.Format(CultureInfo.CurrentCulture, $"Díky, takže {order.CustomerDetails.FirstName} {order.CustomerDetails.LastName}"));
-            }
-        }
-
-        private async Task AfterChangedMyMind(IDialogContext context, IAwaitable<string> result)
-        {
-            try
-            {
-                var option = await result;
-
-                if (option == Resources.RootDialog_Menu_StartOver)
-                {
-                    context.Done(order);
-                }
-                else if (option == Resources.RootDialog_Menu_Cancel)
-                {
-                    await this.PaymentSelectionAsync(context);
-                }
-                else
-                {
-                    await this.AfterPayment(context);
-                }
-            }
-            catch (TooManyAttemptsException)
-            {
-                await this.AfterPayment(context);
-            }
-        }
-
-        private Attachment GetReceiptCard()
-        {
-            var order = this.ordersService.RetrieveOrder(this.order.OrderID);
-            var creditCardOffuscated = order.PaymentDetails.CreditCardNumber.Substring(0, 4) + "-****";
-            var receiptCard = new ReceiptCard
-            {
-                Title = Resources.RootDialog_Receipt_Title,
-                Facts = new List<Fact>
-                {
-                    new Fact(Resources.RootDialog_Receipt_OrderID, order.OrderID),
-                    new Fact(Resources.RootDialog_Receipt_PaymentMethod, creditCardOffuscated)
-                },
-                Items = new List<ReceiptItem>
-                {
-                    new ReceiptItem(
-                        title: order.FlowerCategoryName,
-                        subtitle: order.Bouquet.Name,
-                        price: order.Bouquet.Price.ToString("C"),
-                        image: new CardImage(order.Bouquet.ImageUrl)),
-                },
-                Total = order.Bouquet.Price.ToString("C")
-            };
-
-            return receiptCard.ToAttachment();
-        }
-
-        private async Task AfterPayment(IDialogContext context)
-        {
-            await context.PostAsync($"Diky {order.CustomerDetails.FirstName}, měj se.");
-            context.Done(this.order);
-        }
-
-        private DateTime? ParseDateTime(string text)
-        {
-            DateTime date1;
-            if (DateTime.TryParseExact(text, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out date1))
-                return date1;
-            DateTime date2;
-            if (DateTime.TryParseExact(text, "d.M.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out date2))
-                return date2;
-
-            return null;
-        }
-
     }
 }
