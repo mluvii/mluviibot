@@ -51,8 +51,33 @@ namespace MluviiBot.Dialogs
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            
-            PromptDialog.Text(context, async (ctx, res) => await this.MessageReceivedAsync(ctx, new AwaitableFromItem<IMessageActivity>(new Activity() {Text = await res})), "Omlouvám se, nerozuměl jsem. Vyberte prosím z možností 1) Informace o produktu 2) Dotaz", RetryText, MaxAttempts);
+            var message = await result;
+            if (message.Type != ActivityTypes.Message)
+            {
+                context.Call(this.dialogFactory.Create<MluviiDialog>(), null);
+                return;
+            }
+
+            if (this.conversationReference == null)
+            {
+                this.conversationReference = message.ToConversationReference();
+            }
+            var lower = message.Text.ToLower();
+            if (lower.Contains("produkt") || lower.Contains("1"))
+            {
+                await context.SayAsync("Děkuji, nyní bych od Vás potřeboval několik údajů:");
+                OnProductInterestSelected(context);
+                return;
+            }
+            if (lower.Contains("dotaz") || lower.Contains("2"))
+            {
+                await ConnectToOperator(context, "Dobře, přepojuji Vás na operátora. Hezký den.");
+                return;
+            }
+            PromptDialog.Choice(context, 
+                async (ctx, res) => await this.MessageReceivedAsync(ctx, new AwaitableFromItem<IMessageActivity>(new Activity() {Text = await res})), 
+                new[] { "Zájem o produkt", "Dotaz" },
+                "Omlouvám se, nerozuměl jsem. Vyberte prosím z možností", RetryText, MaxAttempts);
         }
 
         private void OnProductInterestSelected(IDialogContext context)

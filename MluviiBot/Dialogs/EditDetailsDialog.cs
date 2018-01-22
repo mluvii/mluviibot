@@ -111,7 +111,7 @@ namespace MluviiBot.Dialogs
             {
                 if (await subResult)
                 {
-                    await StartAsync(context);
+                    await StartAsync(subContext);
                 }
                 else
                 {

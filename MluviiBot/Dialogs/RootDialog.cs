@@ -25,7 +25,7 @@ namespace MluviiBot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            context.Call(this.dialogFactory.Create<MluviiDialog>(), this.AfterOrderCompleted);
+            await this.WelcomeMessageAsync(context);
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -58,7 +58,6 @@ namespace MluviiBot.Dialogs
                 new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
 
             await context.PostAsync(reply);
-            
 
             context.Call(this.dialogFactory.Create<MluviiDialog>(), this.AfterOrderCompleted);
         }

@@ -49,24 +49,25 @@ namespace MluviiBot.Controllers
             {
                 if (message.MembersAdded.Any(o => o.Id == message.Recipient.Id))
                 {
-                    //var reply = message.CreateReply(Resources.RootDialog_Welcome_Message);
                     var reply = message.CreateReply();
-
-                    var options = new[]
+                    using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, message))
                     {
-                        "Zájem o produkt",
-                        "Pouze dotaz",
-                    };
-                    reply.AddHeroCard(
-                        "Dobrý den, jak Vám mohu pomoci?",
-                        "",
-                        options,
-                        new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
-                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
+                        var dialog = scope.Resolve<IDialog<object>>();
+                        await Conversation.SendAsync(message, () => dialog);
+                    }
+//                    var options = new[]
+//                    {
+//                        "Zájem o produkt",
+//                        "Pouze dotaz",
+//                    };
+//                    reply.AddHeroCard(
+//                        "Dobrý den, jak Vám mohu pomoci?",
+//                        "",
+//                        options,
+//                        new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
+//                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
 
-                    await connector.Conversations.ReplyToActivityAsync(reply);
-
-                    // The Configured IISExpressSSLPort property in this project file
+//                    await connector.Conversations.ReplyToActivityAsync(reply);
                 }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
@@ -80,6 +81,10 @@ namespace MluviiBot.Controllers
             }
             else if (message.Type == ActivityTypes.Ping)
             {
+            }
+            else if (message.Type == ActivityTypes.DeleteUserData)
+            {
+                
             }
         }
     }
