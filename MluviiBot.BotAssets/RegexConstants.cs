@@ -8,6 +8,6 @@ namespace MluviiBot.BotAssets
 
         public const string Phone = @"^\d{9}$";
 
-        public static readonly Regex CONFUSED = new Regex(@"^.*(pomoc|zpet|zpět|nevim|kurva|debil|prdel|co dál|co teď|co můžu říct).*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        public static readonly Regex CONFUSED = new Regex(@"^.*(pomoc|nevim|kurva|debil|prdel|co dál|co teď|co můžu říct).*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     }
 }

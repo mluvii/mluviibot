@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MluviiBot.BotAssets.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Connector;
 using MluviiBot.Models;
 using MluviiBot.Properties;
 
@@ -36,7 +37,7 @@ namespace MluviiBot.Dialogs
                 Resources.CancellableDialog_back,
                 }.Except(new [] {""});
             
-            PromptDialog.Choice(
+            CancelablePromptChoice<string>.Choice(
                 context,
                 this.ResumeAfterOptionSelected,
                 preferencesOptions,
@@ -46,7 +47,13 @@ namespace MluviiBot.Dialogs
         private async Task ResumeAfterOptionSelected(IDialogContext context, IAwaitable<string> result)
         {
             var option = await result;
-
+            
+            if (option == null)
+            {
+                context.Done<object>(null);
+                return;
+            }
+            
             if (option.Equals(Resources.HelpDialog_start_over, StringComparison.OrdinalIgnoreCase))
             {
                 context.Call(this.dialogFactory.Create<IDialog<object>>(), null);
@@ -59,18 +66,14 @@ namespace MluviiBot.Dialogs
             }
             if (option.Equals(Resources.HelpDialog_edit_details, StringComparison.OrdinalIgnoreCase))
             {
-                context.Call(this.dialogFactory.Create<EditDetailsDialog, Person>(person), OnPersonDetailsEdited);
+                context.Call(this.dialogFactory.Create<EditDetailsDialog, Person>(person), OnPersonalDetailsCorrected);
                 return;
             }
-            if (option.Equals(Resources.CancellableDialog_back, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Done<object>(null);
-                return;
-            }
+            
             await StartAsync(context);
         }
 
-        private async Task OnPersonDetailsEdited(IDialogContext context, IAwaitable<Person> result)
+        private async Task OnPersonalDetailsCorrected(IDialogContext context, IAwaitable<Person> result)
         {
             context.UserData.SetValue(Resources.Person_Key, await result);
             await this.StartAsync(context);

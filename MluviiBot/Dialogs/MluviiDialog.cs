@@ -103,8 +103,7 @@ namespace MluviiBot.Dialogs
         private async Task AfterLocation(IDialogContext context, IAwaitable<Place> result)
         {
             var place = await result;
-//            order.BillingAddress = place.Address.FormattedAddress;
-            order.BillingAddress = $"{place?.Address.StreetAddress}, {place?.Address.Locality} {place?.Address.PostalCode}, {place?.Address.Country}";
+            order.CustomerDetails.Address = $"{place?.Address.StreetAddress}, {place?.Address.Locality} {place?.Address.PostalCode}, {place?.Address.Country}";
             var reply = context.MakeMessage();
 
             var options = new[]
@@ -153,7 +152,7 @@ namespace MluviiBot.Dialogs
             await context.SayAsync($"Jméno, Příjmení: {order.CustomerDetails.FirstName}, {order.CustomerDetails.LastName}");
             await context.SayAsync($"Telefon: {order.CustomerDetails.Phone}");
             await context.SayAsync($"Email: {order.CustomerDetails.Email}");
-            await context.SayAsync($"Adresa: {order.BillingAddress}");
+            await context.SayAsync($"Adresa: {order.CustomerDetails.Address}");
 
             PromptDialog.Choice(context, this.OnRecapConfirmation, new[] { "Souhlasí", "Nesouhlasí" },"Je to správně?", RetryText, MaxAttempts);
         }
@@ -164,9 +163,7 @@ namespace MluviiBot.Dialogs
             
             if (lower.Contains("nesouhlas") || !(lower.Contains("souhlasí") || lower.Contains("souhlasi") || lower.Contains("ano") || lower.Contains("správně") || lower.Contains("spravne")))
             {
-                await context.SayAsync("Zopakujte mi prosím správné údaje.");
-                OnProductInterestSelected(context);
-                
+                context.Call(this.dialogFactory.Create<EditDetailsDialog, Person>(order.CustomerDetails), OnPersonalDetailsCorrected);
                 return;
             }
             if (order.LicenceType == LicenceType.One)
@@ -176,6 +173,13 @@ namespace MluviiBot.Dialogs
                 return;
             }
             PromptDialog.Confirm(context, this.OnOrderFinishAnswered, "Přejete si požadavek dořesit nyní?", RetryText, MaxAttempts);
+        }
+        
+        private async Task OnPersonalDetailsCorrected(IDialogContext context, IAwaitable<Person> result)
+        {
+            order.CustomerDetails = await result;
+            context.UserData.SetValue(Resources.Person_Key, order.CustomerDetails);
+            await this.AskVerification(context);
         }
 
         private async Task OnOrderFinishAnswered(IDialogContext context, IAwaitable<bool> result)
