@@ -24,7 +24,6 @@ namespace MluviiBot.BotAssets
         public override string StreetAddress => "ulice";
         public override string TitleSuffix => "Napište svou adresu ve formátu \"Ulice číslo město\". Napřiklad: Sokolovská 1 Praha";
         public override string AskForTemplate => " Ještě mi chybí {0}.";
-        public override string ConfirmationPositiveResponses => "ano, jo, spravne, správně, je, jj";
         public override string AskForPrefix => "Dobře {0}";
         public override string AskForEmptyAddressTemplate => "Ještě mi chybí {0}";
     }
