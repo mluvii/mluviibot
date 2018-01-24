@@ -91,6 +91,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dialogs\CancelablePromptChoice.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="MluviiLocationResourceManager.cs" />
     <Compile Include="Dialogs\CancelablePromptChoice.cs" />
     <Compile Include="Dialogs\DialogFactory.cs" />
@@ -100,6 +102,8 @@
     <Compile Include="Dialogs\SavedAddressDialog.cs" />
     <Compile Include="Extensions\HeroCardExtensions.cs" />
     <Compile Include="Extensions\IBotDataBagExtensions.cs" />
+    <Compile Include="Models\AvailableOperatorInfo.cs" />
+    <Compile Include="Models\DebugOptions.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\UserPreferences.cs" />
