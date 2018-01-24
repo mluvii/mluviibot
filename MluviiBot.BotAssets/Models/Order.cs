@@ -10,18 +10,9 @@ namespace MluviiBot.Models
 
         public Person CustomerDetails { get; set; }
 
-        public string BillingAddress { get; set; }
-        public LicenceType LicenceType { get; set; }
-
         public Order()
         {
             CustomerDetails = new Person();
         }
-    }
-
-    public enum LicenceType
-    {
-        One,
-        Multiple
     }
 }
