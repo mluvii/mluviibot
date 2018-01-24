@@ -171,6 +171,7 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
+    <Content Include="Properties\PublishProfiles\mluviktest.PublishSettings" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -213,6 +214,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <None Include="Properties\PublishProfiles\MluviiBot - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\MluvikTest - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
