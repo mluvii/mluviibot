@@ -296,6 +296,24 @@ Here is your receipt:</value>
     <data name="EditDetailsDialogDialog_prompt" xml:space="preserve">
     <value>Který údaj si přejete změnit</value>
   </data>
+    <data name="OperatorSelection_not_interesed" xml:space="preserve">
+    <value>Nechci teď mluvit s operátorem</value>
+  </data>
+    <data name="OperatorSelection_none_availible" xml:space="preserve">
+    <value>Je nám líto, momentálně nejsou k dispozici žádní operátoři.</value>
+  </data>
+    <data name="OperatorSelection_none_availible_prompt" xml:space="preserve">
+    <value>Přejete si kontaktovat emailem nebo telefonicky?</value>
+  </data>
+    <data name="OperatorConnect_wait" xml:space="preserve">
+    <value>Dobře, přepojuji Vás na operátora. Prosím strpení.</value>
+  </data>
+    <data name="RetryText" xml:space="preserve">
+    <value>Nerozuměl jsem, můžete to zkusit ještě jednou?</value>
+  </data>
+    <data name="cancel_order" xml:space="preserve">
+    <value>Zrušit objednávku</value>
+  </data>
   <data name="SettingsDialog_Email_Entered" xml:space="preserve">
     <value>Thanks! Your email was updated to {0}.</value>
     <comment>{0} is email</comment>

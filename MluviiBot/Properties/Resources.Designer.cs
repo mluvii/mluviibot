@@ -88,6 +88,15 @@ namespace MluviiBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zrušit objednávku.
+        /// </summary>
+        internal static string cancel_order {
+            get {
+                return ResourceManager.GetString("cancel_order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zpět.
         /// </summary>
         internal static string CancellableDialog_back {
@@ -214,6 +223,42 @@ namespace MluviiBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dobře, přepojuji Vás na operátora. Prosím strpení..
+        /// </summary>
+        internal static string OperatorConnect_wait {
+            get {
+                return ResourceManager.GetString("OperatorConnect_wait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Je nám líto, momentálně nejsou k dispozici žádní operátoři..
+        /// </summary>
+        internal static string OperatorSelection_none_availible {
+            get {
+                return ResourceManager.GetString("OperatorSelection_none_availible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Přejete si kontaktovat emailem nebo telefonicky?.
+        /// </summary>
+        internal static string OperatorSelection_none_availible_prompt {
+            get {
+                return ResourceManager.GetString("OperatorSelection_none_availible_prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nechci teď mluvit s operátorem.
+        /// </summary>
+        internal static string OperatorSelection_not_interesed {
+            get {
+                return ResourceManager.GetString("OperatorSelection_not_interesed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What&apos;s the {&amp;}?.
         /// </summary>
         internal static string Order_RecipientFirstName_Prompt {
@@ -232,7 +277,7 @@ namespace MluviiBot.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nerozuměl jsem, můžeš mi to napsat ještě jednou?.
+        ///   Looks up a localized string similar to Nerozuměl jsem, můžete to zkusit ještě jednou?.
         /// </summary>
         internal static string RetryText {
             get {

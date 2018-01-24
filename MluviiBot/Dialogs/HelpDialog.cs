@@ -13,13 +13,15 @@ namespace MluviiBot.Dialogs
     [Serializable]
     public class HelpDialog : IDialog
     {
+        private readonly bool canGoBack;
         private Person person;
         private readonly IMluviiBotDialogFactory dialogFactory;
 
         private string selectedAddressToUpdate;
 
-        public HelpDialog(IMluviiBotDialogFactory dialogFactory)
+        public HelpDialog(IMluviiBotDialogFactory dialogFactory, bool canGoBack = true)
         {
+            this.canGoBack = canGoBack;
             SetField.NotNull(out this.dialogFactory, nameof(dialogFactory), dialogFactory);
         }
 
@@ -34,7 +36,7 @@ namespace MluviiBot.Dialogs
                     Resources.HelpDialog_start_over,
                     Resources.HelpDialog_connect_operator,
                     person != null ? Resources.HelpDialog_edit_details : "",
-                Resources.CancellableDialog_back,
+                    canGoBack ? Resources.CancellableDialog_back : "",
                 }.Except(new [] {""});
             
             CancelablePromptChoice<string>.Choice(

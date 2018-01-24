@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -21,8 +22,7 @@ namespace MluviiBot.Dialogs
 {
     public class MluviiDialog: IDialog<Models.Order>
     {
-        private const string RetryText = "Nerozuměl jsem, můžete mi to napsat ještě jednou?";
-        private const int MaxAttempts = 10;
+        private const int MaxAttempts = 5;
         private ConversationReference conversationReference;
         private Models.Order order;
         private readonly IMluviiBotDialogFactory dialogFactory;
@@ -50,10 +50,21 @@ namespace MluviiBot.Dialogs
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
-            var message = await result;
-            if (message.Type != ActivityTypes.Message)
+            try
             {
-                context.Call(this.dialogFactory.Create<MluviiDialog>(), null);
+                await result;
+            }
+            catch (TooManyAttemptsException e)
+            {
+                context.Call(this.dialogFactory.Create<HelpDialog, bool>(false), null);
+            }
+
+            var message = await result;
+            
+            //Some bug in PromptDialog.Choice causes message.Type to be null
+            if (message.Text == null) //message.Type != ActivityTypes.Message)
+            {
+                await StartAsync(context);
                 return;
             }
 
@@ -70,13 +81,9 @@ namespace MluviiBot.Dialogs
             }
             if (lower.Contains("dotaz") || lower.Contains("2"))
             {
-                await ConnectToOperator(context, "Dobře, přepojuji Vás na operátora. Hezký den.");
+                await ConnectToOperator(context, Resources.OperatorConnect_wait);
                 return;
             }
-            PromptDialog.Choice(context, 
-                async (ctx, res) => await this.MessageReceivedAsync(ctx, new AwaitableFromItem<IMessageActivity>(new Activity() {Text = await res})), 
-                new[] { "Zájem o produkt", "Dotaz" },
-                "Omlouvám se, nerozuměl jsem. Vyberte prosím z možností", RetryText, MaxAttempts);
         }
 
         private void OnProductInterestSelected(IDialogContext context)
@@ -99,51 +106,12 @@ namespace MluviiBot.Dialogs
 
             context.Call(locationDialog, this.AfterLocation);
         }
-        
+
         private async Task AfterLocation(IDialogContext context, IAwaitable<Place> result)
         {
             var place = await result;
             order.CustomerDetails.Address = $"{place?.Address.StreetAddress}, {place?.Address.Locality} {place?.Address.PostalCode}, {place?.Address.Country}";
-            var reply = context.MakeMessage();
-
-            var options = new[]
-            {
-                "1 licence",
-                "Více licencí",
-                "Poradit",
-            };
-            reply.AddHeroCard(
-                "O jaký typ licence máte zájem, nebo potřebujete poradit?",
-                "",
-                options);
-
-            await context.PostAsync(reply);
-            context.Wait(OnLicenceTypeSelected);
-        }
-
-        private async Task OnLicenceTypeSelected(IDialogContext context, IAwaitable<IMessageActivity> result)
-        {
-            var lower = (await result).Text?.ToLower();
-            
-            if (lower.Contains("jedna") || lower.Contains("1"))
-            {
-                order.LicenceType = LicenceType.One;
-                await AskVerification(context);
-                return;
-            }
-            if (lower.Contains("více") || lower.Contains("vice") || lower.Contains("2"))
-            {
-                order.LicenceType = LicenceType.Multiple;
-                await AskVerification(context);
-                return;
-            }
-            if (lower.Contains("poradit") || lower.Contains("3"))
-            {
-                await ConnectToOperator(context, "Dobře, přepojuji Vás na operátora. Hezký den.");
-                return;
-            }
-            
-            PromptDialog.Text(context, async (ctx, res) => await this.OnLicenceTypeSelected(ctx, new AwaitableFromItem<IMessageActivity>(new Activity() {Text = await res})), "Omlouvám se, nerozuměl jsem. Vyberte prosím z možností 1) 1 Licence 2) Více licencí 3) Přepojit na operátora", RetryText, MaxAttempts);
+            await AskVerification(context);
         }
 
         private async Task AskVerification(IDialogContext context)
@@ -154,27 +122,75 @@ namespace MluviiBot.Dialogs
             await context.SayAsync($"Email: {order.CustomerDetails.Email}");
             await context.SayAsync($"Adresa: {order.CustomerDetails.Address}");
 
-            PromptDialog.Choice(context, this.OnRecapConfirmation, new[] { "Souhlasí", "Nesouhlasí" },"Je to správně?", RetryText, MaxAttempts);
+            PromptDialog.Choice(context, this.OnRecapConfirmation, new[] { "Souhlasí", "Nesouhlasí" },"Je to správně?", Resources.RetryText, MaxAttempts);
         }
 
         private async Task OnRecapConfirmation(IDialogContext context, IAwaitable<string> result)
         {
+            try
+            {
+                await result;
+            }
+            catch (TooManyAttemptsException e)
+            {
+                context.Call(this.dialogFactory.Create<HelpDialog, bool>(false), null);
+                return;
+            }
             var lower = (await result).ToLower();
             
-            if (lower.Contains("nesouhlas") || !(lower.Contains("souhlasí") || lower.Contains("souhlasi") || lower.Contains("ano") || lower.Contains("správně") || lower.Contains("spravne")))
+            if (lower.Contains("nesouhlas") || !(lower.Contains("souhlasí") || lower.Contains("souhlasi")|| lower.Contains("jo") || lower.Contains("ano") || lower.Contains("správně") || lower.Contains("spravne")))
             {
                 context.Call(this.dialogFactory.Create<EditDetailsDialog, Person>(order.CustomerDetails), OnPersonalDetailsCorrected);
                 return;
             }
-            if (order.LicenceType == LicenceType.One)
+            await context.SayAsync($"Dobře, momentík podívám se kdo z kolegů je volný.");
+            context.Call(this.dialogFactory.Create<AvailibleOperatorsDialog>(), OnAvailibleOperatorsResponse);
+        }
+
+        private async Task OnAvailibleOperatorsResponse(IDialogContext context, IAwaitable<AvailableOperatorInfo> result)
+        {
+            var selectedOperator = await result;
+
+            if (selectedOperator == null)
             {
-                await context.SayAsync("Gratulujeme! Objednávka je vygenerována. Následujíci pracovní den obdržíte další instrukce.");
-                context.Done(order);
+                PromptDialog.Choice(context, this.OnOfflineContactSelected, new[] {"Telefonicky", "Emailem", Resources.cancel_order}, 
+                    Resources.OperatorSelection_none_availible_prompt, Resources.RetryText, MaxAttempts);
                 return;
             }
-            PromptDialog.Confirm(context, this.OnOrderFinishAnswered, "Přejete si požadavek dořesit nyní?", RetryText, MaxAttempts);
+
+            await ConnectToOperator(context, Resources.OperatorConnect_wait, selectedOperator.UserId);
         }
-        
+
+        private async Task OnOfflineContactSelected(IDialogContext context, IAwaitable<string> result)
+        {
+            try
+            {
+                await result;
+            }
+            catch (TooManyAttemptsException e)
+            {
+                context.Call(this.dialogFactory.Create<HelpDialog, bool>(false), null);
+            }
+
+            var response = await result;
+
+            if (response.ToLower().Contains("mail") || response.ToLower().Contains("mejl"))
+            {
+                
+            }
+            if (response.ToLower().Contains("telefon") || response.ToLower().Contains("mobil") || response.ToLower().Contains("volat") || response.ToLower().Contains("volej")) 
+            {
+                
+            }
+
+            if (response.ToLower().Contains("zrušit") || response.ToLower().Contains("zrusit")  )
+            {
+                await context.SayAsync($"Je nám líto, že jste se rozhodl objednávku zrušit. Snad Vás brzy znovu uvidíme na našich stránkách :)");
+            }
+            
+        }
+
+
         private async Task OnPersonalDetailsCorrected(IDialogContext context, IAwaitable<Person> result)
         {
             order.CustomerDetails = await result;
@@ -182,21 +198,15 @@ namespace MluviiBot.Dialogs
             await this.AskVerification(context);
         }
 
-        private async Task OnOrderFinishAnswered(IDialogContext context, IAwaitable<bool> result)
-        {
-            if (await result)
-            {
-                await ConnectToOperator(context, "Vyčkejte prosím na přepojení na operátora.");
-                return;
-            }
 
-            await context.SayAsync("Na Váš telefon Vás budeme kontaktovat následující pracovní den.");
-            context.Done(order);
-        }
-
-        private async Task ConnectToOperator(IDialogContext context, string message)
+        private async Task ConnectToOperator(IDialogContext context, string message, int? userID = null)
         {
             var data = JObject.Parse(@"{ ""Activity"": ""Forward"" }");
+            if (userID != null)
+            {
+                data.Add("UserID", userID.Value);
+            }
+            
             var act = context.MakeMessage();
             act.ChannelData = data;
             act.Text = message;

@@ -64,7 +64,7 @@ namespace MluviiBot.Dialogs
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)
         {
             order = await result;
-            context.Done(order);
+            context.EndConversation("");
         }
 
         private async Task StartOverAsync(IDialogContext context, string text)

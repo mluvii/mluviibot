@@ -21,7 +21,7 @@ namespace MluviiBot.Controllers
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message)
+            if (activity.Type == ActivityTypes.Message || activity.Type == ActivityTypes.Event)
             {
                 using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, activity))
                 {

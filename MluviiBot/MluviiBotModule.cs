@@ -39,6 +39,9 @@ namespace MluviiBot
             builder.RegisterType<HelpDialog>()
                 .InstancePerDependency();
 
+            
+            builder.RegisterType<AvailibleOperatorsDialog>()
+                .InstancePerDependency();
             builder.RegisterType<HelpScorable>()
                 .As<IScorable<IActivity, double>>()
                 .InstancePerLifetimeScope();
