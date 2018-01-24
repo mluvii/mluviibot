@@ -16,6 +16,7 @@ using MluviiBot.BotAssets;
 using MluviiBot.BotAssets.Extensions;
 using MluviiBot.Models;
 using MluviiBot.Properties;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MluviiBot.Dialogs
@@ -26,11 +27,13 @@ namespace MluviiBot.Dialogs
         private ConversationReference conversationReference;
         private Models.Order order;
         private readonly IMluviiBotDialogFactory dialogFactory;
+        private readonly DebugOptions debugOptions;
 
 
-        public MluviiDialog(IMluviiBotDialogFactory dialogFactory)
+        public MluviiDialog(IMluviiBotDialogFactory dialogFactory, DebugOptions debugOptions = DebugOptions.None)
         {
             this.dialogFactory = dialogFactory;
+            this.debugOptions = debugOptions;
         }
 
         public async Task StartAsync(IDialogContext context)
@@ -71,6 +74,12 @@ namespace MluviiBot.Dialogs
             if (this.conversationReference == null)
             {
                 this.conversationReference = message.ToConversationReference();
+            }
+
+            if (debugOptions != DebugOptions.None)
+            {
+                await DebugMenu(context);
+                return;
             }
             var lower = message.Text.ToLower();
             if (lower.Contains("produkt") || lower.Contains("1"))
@@ -211,6 +220,19 @@ namespace MluviiBot.Dialogs
             act.ChannelData = data;
             act.Text = message;
             await context.PostAsync(act);
+        }
+
+        private async Task DebugMenu(IDialogContext context)
+        {
+            switch (debugOptions)
+            {
+                   case DebugOptions.GotoFinalConfirmation:
+                       await AskVerification(context);
+                       break;
+                   case DebugOptions.GotoOperatorSearch:
+                       context.Call(this.dialogFactory.Create<AvailibleOperatorsDialog>(), OnAvailibleOperatorsResponse);
+                       break;
+            }
         }
     }
 }
