@@ -94,7 +94,6 @@
     <Compile Include="Dialogs\CancelablePromptChoice.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="MluviiLocationResourceManager.cs" />
-    <Compile Include="Dialogs\CancelablePromptChoice.cs" />
     <Compile Include="Dialogs\DialogFactory.cs" />
     <Compile Include="Dialogs\IDialogFactory.cs" />
     <Compile Include="Dialogs\PagedCarouselDialog.cs" />
@@ -119,12 +118,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MluviiBot.Services\MluviiBot.Services.csproj">
-      <Project>{2ABDF0FC-7533-41B0-B530-3003D4D2EF4E}</Project>
-      <Name>MluviiBot.Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

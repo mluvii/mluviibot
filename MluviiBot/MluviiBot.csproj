@@ -181,10 +181,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BLL\ValidationUtils.cs" />
+    <Compile Include="Dialogs\DebugDialog.cs" />
+    <Compile Include="Dialogs\DebugScorable.cs" />
     <Compile Include="Dialogs\EditDetailsDialog.cs" />
     <Compile Include="Dialogs\HandoverDialog.cs" />
     <Compile Include="Dialogs\HelpDialog.cs" />
     <Compile Include="Dialogs\HelpScorable.cs" />
+    <Compile Include="Dialogs\AvailibleOperatorsDialog.cs" />
     <Compile Include="MluviiBotModule.cs" />
     <Compile Include="Contracts\CRMPerson.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
@@ -230,10 +233,6 @@
     <ProjectReference Include="..\MluviiBot.BotAssets\MluviiBot.BotAssets.csproj">
       <Project>{4010e1d2-220e-44ca-9259-92b1b2acc794}</Project>
       <Name>MluviiBot.BotAssets</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MluviiBot.Services\MluviiBot.Services.csproj">
-      <Project>{2abdf0fc-7533-41b0-b530-3003d4d2ef4e}</Project>
-      <Name>MluviiBot.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
