@@ -152,6 +152,8 @@ namespace MluviiBot.Dialogs
                 context.Call(this.dialogFactory.Create<EditDetailsDialog, Person>(order.CustomerDetails), OnPersonalDetailsCorrected);
                 return;
             }
+
+            SetCallParams(context);
             await context.SayAsync($"Dobře, momentík podívám se kdo z kolegů je volný.");
             context.Call(this.dialogFactory.Create<AvailibleOperatorsDialog>(), OnAvailibleOperatorsResponse);
         }
@@ -213,12 +215,30 @@ namespace MluviiBot.Dialogs
             var data = JObject.Parse(@"{ ""Activity"": ""Forward"" }");
             if (userID != null)
             {
-                data.Add("UserID", userID.Value);
+                data.Add("UserId", userID.Value);
             }
             
             var act = context.MakeMessage();
             act.ChannelData = data;
             act.Text = message;
+            await context.PostAsync(act);
+        }
+
+        private async void SetCallParams(IDialogContext context)
+        {
+            var dict = new Dictionary<string, string>
+            {
+                {ClientCallPredefParam.GUEST_IDENTITY, $"{order.CustomerDetails.FirstName} {order.CustomerDetails.LastName}"},
+                {ClientCallPredefParam.GUEST_EMAIL, $"{order.CustomerDetails.Email}"},
+                {ClientCallPredefParam.GUEST_PHONE, $"{order.CustomerDetails.Phone}"},
+                {ClientCallPredefParam.GUEST_ADDRESS, $"{order.CustomerDetails.Address}"},
+            };
+            var CallParams = JObject.FromObject(dict);
+            var data = JObject.Parse(@"{ ""Activity"": ""SetCallParams"" }");
+            data.Add("CallParams", CallParams);
+
+            var act = context.MakeMessage();
+            act.ChannelData = data;
             await context.PostAsync(act);
         }
 
