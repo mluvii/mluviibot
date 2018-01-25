@@ -52,6 +52,7 @@ namespace MluviiBot.Dialogs
             {
                 await context.SayAsync("Stále ještě hledám volné kolegy.");
                 maxAttempts--;
+                await AskServerForAvailableOperators(context);
                 context.Wait(OnMessageRecieved);
                 return;
             }
