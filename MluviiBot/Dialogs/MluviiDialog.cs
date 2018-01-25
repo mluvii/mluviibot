@@ -187,18 +187,22 @@ namespace MluviiBot.Dialogs
 
             if (response.ToLower().Contains("mail") || response.ToLower().Contains("mejl"))
             {
-                
+                await SendGuestOfflineEmail(context, "Email");
             }
             if (response.ToLower().Contains("telefon") || response.ToLower().Contains("mobil") || response.ToLower().Contains("volat") || response.ToLower().Contains("volej")) 
             {
-                
+                await SendGuestOfflineEmail(context, "Telefon");
             }
 
             if (response.ToLower().Contains("zrušit") || response.ToLower().Contains("zrusit")  )
             {
                 await context.SayAsync($"Je nám líto, že jste se rozhodl objednávku zrušit. Snad Vás brzy znovu uvidíme na našich stránkách :)");
+                context.Done(order);
             }
             
+            await context.SayAsync(Resources.Email_thankyou);
+            await context.SayAsync(Resources.goodbye);
+            context.Done(order);
         }
 
 
@@ -209,7 +213,23 @@ namespace MluviiBot.Dialogs
             await this.AskVerification(context);
         }
 
-
+        private async Task SendGuestOfflineEmail(IDialogContext context, string contactMethod)
+        {
+            var data = JObject.Parse(@"{ ""Activity"": ""SendGuestOfflineEmail"" }");
+            data.Add("Subject", Resources.Email_lead_subject);
+            data.Add("Message", string.Format(Resources.Email_lead_body, 
+                contactMethod,
+                order.CustomerDetails.FullName,
+                order.CustomerDetails.Phone,
+                order.CustomerDetails.Email,
+                order.CustomerDetails.Address));
+            
+            var act = context.MakeMessage();
+            act.ChannelData = data;
+            await context.PostAsync(act);
+        }
+        
+        
         private async Task ConnectToOperator(IDialogContext context, string message, int? userID = null)
         {
             var data = JObject.Parse(@"{ ""Activity"": ""Forward"" }");
@@ -228,10 +248,10 @@ namespace MluviiBot.Dialogs
         {
             var dict = new Dictionary<string, string>
             {
-                {ClientCallPredefParam.GUEST_IDENTITY, $"{order.CustomerDetails.FirstName} {order.CustomerDetails.LastName}"},
-                {ClientCallPredefParam.GUEST_EMAIL, $"{order.CustomerDetails.Email}"},
-                {ClientCallPredefParam.GUEST_PHONE, $"{order.CustomerDetails.Phone}"},
-                {ClientCallPredefParam.GUEST_ADDRESS, $"{order.CustomerDetails.Address}"},
+                {ClientCallPredefParam.GUEST_IDENTITY, order.CustomerDetails.FullName},
+                {ClientCallPredefParam.GUEST_EMAIL, order.CustomerDetails.Email},
+                {ClientCallPredefParam.GUEST_PHONE, order.CustomerDetails.Phone},
+                {ClientCallPredefParam.GUEST_ADDRESS, order.CustomerDetails.Address},
             };
             var CallParams = JObject.FromObject(dict);
             var data = JObject.Parse(@"{ ""Activity"": ""SetCallParams"" }");

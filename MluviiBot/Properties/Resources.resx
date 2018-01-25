@@ -305,8 +305,24 @@ Here is your receipt:</value>
     <data name="OperatorSelection_none_availible_prompt" xml:space="preserve">
     <value>Přejete si kontaktovat emailem nebo telefonicky?</value>
   </data>
+    <data name="Email_thankyou" xml:space="preserve">
+    <value>Děkujeme za Váš zájem, budeme Vás kontaktovat v nejbližší možnou dobu.</value>
+  </data>
+    <data name="goodbye" xml:space="preserve">
+    <value>Nashledanou</value>
+  </data>
     <data name="OperatorConnect_wait" xml:space="preserve">
     <value>Dobře, přepojuji Vás na operátora. Prosím strpení.</value>
+  </data>
+    <data name="Email_lead_subject" xml:space="preserve">
+    <value>Chatbot</value>
+  </data>
+    <data name="Email_lead_body" xml:space="preserve">
+    <value>Klient projevil zájem o licence a přeje si být kontaktován na {0}
+Jméno: {1}
+Telefon: {2}
+Email: {3}
+Adresa: {4}</value>
   </data>
     <data name="RetryText" xml:space="preserve">
     <value>Nerozuměl jsem, můžete to zkusit ještě jednou?</value>

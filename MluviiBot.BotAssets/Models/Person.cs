@@ -16,6 +16,8 @@ namespace MluviiBot.Models
         [Template(TemplateUsage.NotUnderstood, "Zadejte prosím příjmení")]
         public string LastName { get; set; }
 
+        public string FullName => $"{FirstName} {LastName}";
+
         [Prompt("Zadejte prosím Vaše telefonní číslo (9 míst)", "Teď bych potřeboval Vaše telefonní číslo (9 míst)")]
         [Template(TemplateUsage.Help, "Telefonní číslo na 9 míst (bez mezinárodní předvolby)")]
         [Template(TemplateUsage.NotUnderstood, "Tento telefon nevypadá správně, pište prosím pouze 9 čísel.")]

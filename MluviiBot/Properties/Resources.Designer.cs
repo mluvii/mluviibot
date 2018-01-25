@@ -160,6 +160,37 @@ namespace MluviiBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Klient projevil zájem o licence a přeje si být kontaktován na {0}
+        ///Jméno: {1}
+        ///Telefon: {2}
+        ///Email: {3}
+        ///Adresa: {4}.
+        /// </summary>
+        internal static string Email_lead_body {
+            get {
+                return ResourceManager.GetString("Email_lead_body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chatbot.
+        /// </summary>
+        internal static string Email_lead_subject {
+            get {
+                return ResourceManager.GetString("Email_lead_subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Děkujeme za Váš zájem, budeme Vás kontaktovat v nejbližší možnou dobu..
+        /// </summary>
+        internal static string Email_thankyou {
+            get {
+                return ResourceManager.GetString("Email_thankyou", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The category &quot;{0} is invalid. Please try again..
         /// </summary>
         internal static string FlowerCategoriesDialog_InvalidOption {
@@ -183,6 +214,15 @@ namespace MluviiBot.Properties {
         internal static string FlowerCategoriesDialog_Select {
             get {
                 return ResourceManager.GetString("FlowerCategoriesDialog_Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nashledanou.
+        /// </summary>
+        internal static string goodbye {
+            get {
+                return ResourceManager.GetString("goodbye", resourceCulture);
             }
         }
         

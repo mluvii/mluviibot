@@ -82,12 +82,9 @@ namespace MluviiBot.Dialogs
                     new[] {"Mluvit", Resources.OperatorSelection_not_interesed},$"K dispozici je jen {operatorName}.", Resources.RetryText, 2 );
                 return;
             }
-            if (availibleOperators.AvailableOperators.Count > 0)
-            {
-                
-            }
+           
             await context.SayAsync(Resources.OperatorSelection_none_availible);
-            context.Done<GetAvailableOperatorsResponse>(null);
+            context.Done<AvailableOperatorInfo>(null);
         }
 
         private async Task OnSingleOperatorConfirmed(IDialogContext context, IAwaitable<string> result, string operatorName)
