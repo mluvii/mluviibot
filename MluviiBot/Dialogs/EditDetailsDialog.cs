@@ -50,7 +50,7 @@ namespace MluviiBot.Dialogs
 
                 if (option == null)
                 {
-                    context.Done<object>(null);
+                    context.Done(person);
                     return;
                 }
 
