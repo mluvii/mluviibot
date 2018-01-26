@@ -82,7 +82,7 @@ namespace MluviiBot.Dialogs
                 var operatorName = availibleOperators.AvailableOperators.Single().DisplayName;
                 PromptDialog.Choice(context,
                     (dialogContext, subResult) => OnSingleOperatorConfirmed(dialogContext, subResult, operatorName),
-                    new[] {"Mluvit", Resources.OperatorSelection_not_interesed}, $"K dispozici je jen {operatorName}.",
+                    new[] {"Mluvit", Resources.OperatorSelection_not_interesed}, $"K dispozici je {operatorName}.",
                     Resources.RetryText, 2);
                 return;
             }
@@ -91,8 +91,7 @@ namespace MluviiBot.Dialogs
             context.Done<AvailableOperatorInfo>(null);
         }
 
-        private async Task OnSingleOperatorConfirmed(IDialogContext context, IAwaitable<string> result,
-            string operatorName)
+        private async Task OnSingleOperatorConfirmed(IDialogContext context, IAwaitable<string> result, string operatorName)
         {
             try
             {
@@ -108,8 +107,7 @@ namespace MluviiBot.Dialogs
             if (choice.ToLower() == "mluvit")
                 await OnOperatorSelected(context, new AwaitableFromItem<string>(operatorName));
             else
-                await OnOperatorSelected(context,
-                    new AwaitableFromItem<string>(Resources.OperatorSelection_not_interesed));
+                await OnOperatorSelected(context, new AwaitableFromItem<string>(Resources.OperatorSelection_not_interesed));
         }
 
         private async Task OnOperatorSelected(IDialogContext context, IAwaitable<string> result)
@@ -127,7 +125,7 @@ namespace MluviiBot.Dialogs
 
             if (selectedOpe.Equals(Resources.OperatorSelection_not_interesed))
             {
-                context.Done<GetAvailableOperatorsResponse>(null);
+                context.Done<AvailableOperatorInfo>(null);
                 return;
             }
 
