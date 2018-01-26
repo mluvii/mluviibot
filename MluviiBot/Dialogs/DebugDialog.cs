@@ -23,7 +23,7 @@ namespace MluviiBot.Dialogs
                     var dialog = dialogFactory.Create<MluviiDialog, DebugOptions>(selected);
                     dialogContext.Call(dialog, null);
             },
-            new [] {"GotoFinalConfirmation","GotoOperatorSearch"},
+            new [] {"GotoFinalConfirmation","GotoOperatorSearch", "GotoMap"},
             "DEBUG MENU");
         }
     }

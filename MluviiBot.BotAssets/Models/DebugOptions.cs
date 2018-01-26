@@ -4,6 +4,7 @@
     {
         None,
         GotoFinalConfirmation,
-        GotoOperatorSearch
+        GotoOperatorSearch,
+        GotoMap,
     }
 }
