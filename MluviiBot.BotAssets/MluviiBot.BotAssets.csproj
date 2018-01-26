@@ -91,6 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientCallPredefParam.cs" />
     <Compile Include="Dialogs\CancelablePromptChoice.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="MluviiLocationResourceManager.cs" />
