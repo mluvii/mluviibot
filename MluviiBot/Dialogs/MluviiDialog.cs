@@ -11,6 +11,7 @@ using MluviiBot.Models;
 using MluviiBot.Properties;
 using Newtonsoft.Json.Linq;
 
+#pragma warning disable 1998
 namespace MluviiBot.Dialogs
 {
     public class MluviiDialog : IDialog<Order>
@@ -47,7 +48,7 @@ namespace MluviiBot.Dialogs
             {
                 await result;
             }
-            catch (TooManyAttemptsException e)
+            catch (TooManyAttemptsException)
             {
                 context.Call(dialogFactory.Create<HelpDialog, bool>(false), null);
             }
@@ -105,14 +106,16 @@ namespace MluviiBot.Dialogs
         private async Task AfterLocation(IDialogContext context, IAwaitable<Place> result)
         {
             var place = await result;
-            order.CustomerDetails.Address = $"{place?.Address.StreetAddress}, {place?.Address.Locality} {place?.Address.PostalCode}, {place?.Address.Country}";
+            order.CustomerDetails.Address =
+                $"{place?.Address.StreetAddress}, {place?.Address.Locality} {place?.Address.PostalCode}, {place?.Address.Country}";
             await AskVerification(context);
         }
 
         private async Task AskVerification(IDialogContext context)
         {
             await context.SayAsync("Děkuji, prosím o kontrolu zadaných údajů:");
-            await context.SayAsync($"Jméno, Příjmení: {order.CustomerDetails.FirstName}, {order.CustomerDetails.LastName}");
+            await context.SayAsync(
+                $"Jméno, Příjmení: {order.CustomerDetails.FirstName}, {order.CustomerDetails.LastName}");
             await context.SayAsync($"Telefon: {order.CustomerDetails.Phone}");
             await context.SayAsync($"Email: {order.CustomerDetails.Email}");
             await context.SayAsync($"Adresa: {order.CustomerDetails.Address}");
@@ -127,7 +130,7 @@ namespace MluviiBot.Dialogs
             {
                 await result;
             }
-            catch (TooManyAttemptsException e)
+            catch (TooManyAttemptsException)
             {
                 context.Call(dialogFactory.Create<HelpDialog, bool>(false), null);
                 return;
@@ -171,7 +174,7 @@ namespace MluviiBot.Dialogs
             {
                 await result;
             }
-            catch (TooManyAttemptsException e)
+            catch (TooManyAttemptsException)
             {
                 context.Call(dialogFactory.Create<HelpDialog, bool>(false), null);
             }
@@ -185,13 +188,9 @@ namespace MluviiBot.Dialogs
                 response.ToLower().Contains("volej")) await SendGuestOfflineEmail(context, "Telefon");
 
             if (response.ToLower().Contains("zrušit") || response.ToLower().Contains("zrusit"))
-            {
                 await context.SayAsync(Resources.OrderCanceled);
-            }
             else
-            {
                 await context.SayAsync(Resources.Email_thankyou);
-            }
 
             await context.SayAsync(Resources.goodbye);
             context.Done(order);

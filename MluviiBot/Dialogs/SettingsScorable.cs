@@ -6,7 +6,7 @@ using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Scorables;
 using Microsoft.Bot.Connector;
-
+#pragma warning disable 1998
 namespace MluviiBot.Dialogs
 {
     public class SettingsScorable : IScorable<IActivity, double>

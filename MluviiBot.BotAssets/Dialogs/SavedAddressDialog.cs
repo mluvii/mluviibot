@@ -6,7 +6,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Location;
 using Microsoft.Bot.Connector;
 using MluviiBot.BotAssets.Properties;
-
+#pragma warning disable 1998
 namespace MluviiBot.BotAssets.Dialogs
 {
     [Serializable]

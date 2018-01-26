@@ -11,7 +11,7 @@ using MluviiBot.BotAssets.Dialogs;
 using MluviiBot.BotAssets.Extensions;
 using MluviiBot.Models;
 using MluviiBot.Properties;
-
+#pragma warning disable 1998
 namespace MluviiBot.Dialogs
 {
     [Serializable]

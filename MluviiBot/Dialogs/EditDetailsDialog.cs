@@ -1,7 +1,5 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
@@ -10,13 +8,13 @@ using Microsoft.Bot.Connector;
 using MluviiBot.BotAssets.Dialogs;
 using MluviiBot.Models;
 using MluviiBot.Properties;
-
+#pragma warning disable 1998
 namespace MluviiBot.Dialogs
 {
     public class EditDetailsDialog : IDialog<Person>
     {
-        private Person person;
         private readonly IMluviiBotDialogFactory dialogFactory;
+        private Person person;
 
         public EditDetailsDialog(IMluviiBotDialogFactory dialogFactory, Person person = null)
         {
@@ -32,12 +30,12 @@ namespace MluviiBot.Dialogs
                 Resources.EditDetailsDialog_option_email,
                 Resources.EditDetailsDialog_option_phone,
                 Resources.EditDetailsDialog_option_address,
-                Resources.CancellableDialog_back,
+                Resources.CancellableDialog_back
             };
 
             CancelablePromptChoice<string>.Choice(
                 context,
-                this.ResumeAfterOptionSelected,
+                ResumeAfterOptionSelected,
                 preferencesOptions,
                 Resources.EditDetailsDialogDialog_prompt);
         }
@@ -57,12 +55,12 @@ namespace MluviiBot.Dialogs
                 if (option.Equals(Resources.EditDetailsDialog_option_address, StringComparison.OrdinalIgnoreCase))
                 {
                     var locationDialog = dialogFactory.Create<LocationDialog>(
-                        new Dictionary<string, object>()
+                        new Dictionary<string, object>
                         {
                             {"channelId", context.Activity.ChannelId}
                         });
 
-                    context.Call(locationDialog, this.OnAddressChanged);
+                    context.Call(locationDialog, OnAddressChanged);
                     return;
                 }
 
@@ -73,21 +71,17 @@ namespace MluviiBot.Dialogs
                 }
 
                 if (option.Equals(Resources.EditDetailsDialog_option_email, StringComparison.OrdinalIgnoreCase))
-                {
                     person.Email = null;
-                }
 
                 if (option.Equals(Resources.EditDetailsDialog_option_phone, StringComparison.OrdinalIgnoreCase))
-                {
                     person.Phone = null;
-                }
 
                 var form = new FormDialog<Person>(person, Person.BuildForm, FormOptions.PromptInStart);
                 context.Call(form, OnPersonDetailsChanged);
             }
             catch (TooManyAttemptsException)
             {
-                await this.StartAsync(context);
+                await StartAsync(context);
             }
         }
 
@@ -114,13 +108,9 @@ namespace MluviiBot.Dialogs
             PromptDialog.Confirm(context, async (subContext, subResult) =>
             {
                 if (await subResult)
-                {
                     await StartAsync(subContext);
-                }
                 else
-                {
                     subContext.Done(person);
-                }
             }, new PromptOptions<string>("Přejete si změnit ještě další údaje?"));
         }
     }

@@ -1,19 +1,18 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Scorables;
 using Microsoft.Bot.Connector;
-using MluviiBot.BotAssets;
+#pragma warning disable 1998
 
 namespace MluviiBot.Dialogs
 {
     public class DebugScorable : IScorable<IActivity, double>
     {
-        private readonly IDialogTask task;
         private readonly IMluviiBotDialogFactory dialogFactory;
+        private readonly IDialogTask task;
 
         public DebugScorable(IDialogTask task, IMluviiBotDialogFactory dialogFactory)
         {
@@ -26,12 +25,8 @@ namespace MluviiBot.Dialogs
             var message = item as IMessageActivity;
 
             if (!string.IsNullOrWhiteSpace(message?.Text))
-            {
                 if (message.Text == "618" || message.Text == "hadooken")
-                {
                     return message.Text;
-                }
-            }
 
             return null;
         }
@@ -43,7 +38,7 @@ namespace MluviiBot.Dialogs
 
         public double GetScore(IActivity item, object state)
         {
-            bool matched = state != null;
+            var matched = state != null;
             var score = matched ? 1.0 : double.NaN;
             return score;
         }
@@ -61,10 +56,10 @@ namespace MluviiBot.Dialogs
                 var interruption = DebugDialog.Void<object, IMessageActivity>();
 
                 // put the interrupting dialog on the stack
-                this.task.Call(interruption, null);
+                task.Call(interruption, null);
 
                 // start running the interrupting dialog
-                await this.task.PollAsync(token);
+                await task.PollAsync(token);
             }
         }
 

@@ -14,9 +14,9 @@ namespace MluviiBot.Dialogs
     public class AvailibleOperatorsDialog : IDialog<AvailableOperatorInfo>
     {
         private readonly IMluviiBotDialogFactory dialogFactory;
-        
-        private int maxAttempts = 3;
         private GetAvailableOperatorsResponse availibleOperators;
+
+        private int maxAttempts = 3;
 
         public AvailibleOperatorsDialog(IMluviiBotDialogFactory dialogFactory)
         {
@@ -34,10 +34,10 @@ namespace MluviiBot.Dialogs
         {
             var activity = await result;
             if (activity.AsEventActivity() != null && activity.ChannelData != null)
-            {
                 try
                 {
-                    var availibleOperatorsInfo = JsonConvert.DeserializeObject<GetAvailableOperatorsResponse>(activity.ChannelData);
+                    var availibleOperatorsInfo =
+                        JsonConvert.DeserializeObject<GetAvailableOperatorsResponse>(activity.ChannelData);
                     await OnAvailibleOperatorsResponse(context, availibleOperatorsInfo);
                     return;
                 }
@@ -46,7 +46,6 @@ namespace MluviiBot.Dialogs
                     context.Done<GetAvailableOperatorsResponse>(null);
                     return;
                 }
-            }
 
             if (maxAttempts > 0)
             {
@@ -56,58 +55,61 @@ namespace MluviiBot.Dialogs
                 context.Wait(OnMessageRecieved);
                 return;
             }
-            
-            await context.SayAsync(Resources.OperatorSelection_none_availible);
-            context.Done<AvailableOperatorInfo>(null);
-        }
-        
-        private async Task OnAvailibleOperatorsResponse(IDialogContext context, GetAvailableOperatorsResponse result)
-        {
-            availibleOperators = result;
-            availibleOperators.AvailableOperators = availibleOperators.AvailableOperators.DistinctBy(ope => ope.DisplayName).ToList();
-            if (availibleOperators.AvailableOperators.Count > 1)
-            {
-                var operatorNames = availibleOperators.AvailableOperators.Select(ope => ope.DisplayName).ToList();
-                operatorNames.Sort();
-                await context.SayAsync($"K dispozici jsou: {string.Join(", ", operatorNames.Take(operatorNames.Count - 1))} a {operatorNames.Last()}");
-                operatorNames.Add(Resources.OperatorSelection_not_interesed);
-                PromptDialog.Choice(context, this.OnOperatorSelected, operatorNames, $"S kým byste chtěl mluvit?", Resources.RetryText, 5);
-                return;
-                
-            }
-            if (availibleOperators.AvailableOperators.Count == 1)
-            {
-                var operatorName = availibleOperators.AvailableOperators.Single().DisplayName;
-                PromptDialog.Choice(context, (dialogContext, subResult) => OnSingleOperatorConfirmed(dialogContext, subResult, operatorName),
-                    new[] {"Mluvit", Resources.OperatorSelection_not_interesed},$"K dispozici je jen {operatorName}.", Resources.RetryText, 2 );
-                return;
-            }
-           
+
             await context.SayAsync(Resources.OperatorSelection_none_availible);
             context.Done<AvailableOperatorInfo>(null);
         }
 
-        private async Task OnSingleOperatorConfirmed(IDialogContext context, IAwaitable<string> result, string operatorName)
+        private async Task OnAvailibleOperatorsResponse(IDialogContext context, GetAvailableOperatorsResponse result)
+        {
+            availibleOperators = result;
+            availibleOperators.AvailableOperators =
+                availibleOperators.AvailableOperators.DistinctBy(ope => ope.DisplayName).ToList();
+            if (availibleOperators.AvailableOperators.Count > 1)
+            {
+                var operatorNames = availibleOperators.AvailableOperators.Select(ope => ope.DisplayName).ToList();
+                operatorNames.Sort();
+                await context.SayAsync(
+                    $"K dispozici jsou: {string.Join(", ", operatorNames.Take(operatorNames.Count - 1))} a {operatorNames.Last()}");
+                operatorNames.Add(Resources.OperatorSelection_not_interesed);
+                PromptDialog.Choice(context, OnOperatorSelected, operatorNames, $"S kým byste chtěl mluvit?",
+                    Resources.RetryText, 5);
+                return;
+            }
+
+            if (availibleOperators.AvailableOperators.Count == 1)
+            {
+                var operatorName = availibleOperators.AvailableOperators.Single().DisplayName;
+                PromptDialog.Choice(context,
+                    (dialogContext, subResult) => OnSingleOperatorConfirmed(dialogContext, subResult, operatorName),
+                    new[] {"Mluvit", Resources.OperatorSelection_not_interesed}, $"K dispozici je jen {operatorName}.",
+                    Resources.RetryText, 2);
+                return;
+            }
+
+            await context.SayAsync(Resources.OperatorSelection_none_availible);
+            context.Done<AvailableOperatorInfo>(null);
+        }
+
+        private async Task OnSingleOperatorConfirmed(IDialogContext context, IAwaitable<string> result,
+            string operatorName)
         {
             try
             {
                 await result;
             }
-            catch (TooManyAttemptsException e)
+            catch (TooManyAttemptsException)
             {
-                context.Call(this.dialogFactory.Create<HelpDialog, bool>(false), null);
+                context.Call(dialogFactory.Create<HelpDialog, bool>(false), null);
                 return;
             }
 
             var choice = await result;
             if (choice.ToLower() == "mluvit")
-            {
                 await OnOperatorSelected(context, new AwaitableFromItem<string>(operatorName));
-            }
             else
-            {
-                await OnOperatorSelected(context, new AwaitableFromItem<string>(Resources.OperatorSelection_not_interesed));
-            }
+                await OnOperatorSelected(context,
+                    new AwaitableFromItem<string>(Resources.OperatorSelection_not_interesed));
         }
 
         private async Task OnOperatorSelected(IDialogContext context, IAwaitable<string> result)
@@ -116,11 +118,10 @@ namespace MluviiBot.Dialogs
             try
             {
                 selectedOpe = await result;
-
             }
-            catch (TooManyAttemptsException e)
+            catch (TooManyAttemptsException)
             {
-                context.Call(this.dialogFactory.Create<HelpDialog, bool>(false), null);
+                context.Call(dialogFactory.Create<HelpDialog, bool>(false), null);
                 return;
             }
 
@@ -130,11 +131,12 @@ namespace MluviiBot.Dialogs
                 return;
             }
 
-            var selected = availibleOperators.AvailableOperators.SingleOrDefault(ope => ope.DisplayName.Equals(selectedOpe));
+            var selected =
+                availibleOperators.AvailableOperators.SingleOrDefault(ope => ope.DisplayName.Equals(selectedOpe));
 
             context.Done(selected);
         }
-        
+
         private async Task AskServerForAvailableOperators(IDialogContext context)
         {
             var a = context.Activity as Activity;

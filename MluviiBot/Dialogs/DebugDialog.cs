@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using MluviiBot.Models;
+#pragma warning disable 1998
 
 namespace MluviiBot.Dialogs
 {
