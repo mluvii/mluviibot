@@ -217,6 +217,7 @@ namespace MluviiBot.Dialogs
         {
             var data = JObject.Parse(@"{ ""Activity"": ""SendGuestOfflineEmail"" }");
             data.Add("Subject", Resources.Email_lead_subject);
+            data.Add("Location", "Chatbot Mluvik");
             data.Add("Message", string.Format(Resources.Email_lead_body, 
                 contactMethod,
                 order.CustomerDetails.FullName,
