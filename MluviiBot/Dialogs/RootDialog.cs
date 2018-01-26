@@ -53,8 +53,7 @@ namespace MluviiBot.Dialogs
             reply.AddHeroCard(
                 "Dobrý den, jak Vám mohu pomoci?",
                 "",
-                options,
-                new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
+                options);
 
             await context.PostAsync(reply);
 
