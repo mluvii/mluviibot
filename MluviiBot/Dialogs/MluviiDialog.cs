@@ -186,12 +186,13 @@ namespace MluviiBot.Dialogs
 
             if (response.ToLower().Contains("zrušit") || response.ToLower().Contains("zrusit"))
             {
-                await context.SayAsync(
-                    $"Je nám líto, že jste se rozhodl objednávku zrušit. Snad Vás brzy znovu uvidíme na našich stránkách :)");
-                context.Done(order);
+                await context.SayAsync(Resources.OrderCanceled);
+            }
+            else
+            {
+                await context.SayAsync(Resources.Email_thankyou);
             }
 
-            await context.SayAsync(Resources.Email_thankyou);
             await context.SayAsync(Resources.goodbye);
             context.Done(order);
         }

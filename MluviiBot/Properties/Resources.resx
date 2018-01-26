@@ -308,6 +308,9 @@ Here is your receipt:</value>
     <data name="Email_thankyou" xml:space="preserve">
     <value>Děkujeme za Váš zájem, budeme Vás kontaktovat v nejbližší možnou dobu.</value>
   </data>
+    <data name="OrderCanceled" xml:space="preserve">
+    <value>Je nám líto, že jste se rozhodl objednávku zrušit. Snad Vás brzy znovu uvidíme na našich stránkách :)</value>
+  </data>
     <data name="goodbye" xml:space="preserve">
     <value>Nashledanou</value>
   </data>

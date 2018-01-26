@@ -308,6 +308,15 @@ namespace MluviiBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Je nám líto, že jste se rozhodl objednávku zrušit. Snad Vás brzy znovu uvidíme na našich stránkách :).
+        /// </summary>
+        internal static string OrderCanceled {
+            get {
+                return ResourceManager.GetString("OrderCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Person.
         /// </summary>
         internal static string Person_Key {
