@@ -296,6 +296,15 @@ Here is your receipt:</value>
     <data name="EditDetailsDialogDialog_prompt" xml:space="preserve">
     <value>Který údaj si přejete změnit</value>
   </data>
+    <data name="MluviiDialog_welcome_prompt" xml:space="preserve">
+    <value>Dobrý den, jak Vám mohu pomoci?</value>
+  </data>
+    <data name="MluviiDialog_product_interest" xml:space="preserve">
+    <value>Zájem o produkt</value>
+  </data>
+    <data name="MluviiDialog_question" xml:space="preserve">
+    <value>Pouze dotaz</value>
+  </data>
     <data name="OperatorSelection_not_interesed" xml:space="preserve">
     <value>Nechci teď mluvit s operátorem</value>
   </data>
@@ -319,6 +328,15 @@ Here is your receipt:</value>
   </data>
     <data name="Email_lead_subject" xml:space="preserve">
     <value>Chatbot</value>
+  </data>
+    <data name="MluviiDialog_return_back_to_person_form" xml:space="preserve">
+    <value>Doplnit chybející údaje</value>
+  </data>
+    <data name="MluviiDialog_person_form_cancelled" xml:space="preserve">
+    <value>Pokud si nepřejete nyní zadávat své údaje, můžu Vás místo toho spojit s operátorem.</value>
+  </data>
+    <data name="MluviiDialog_wait_checking_available_operators" xml:space="preserve">
+    <value>Dobře, momentík podívám se kdo z kolegů je volný.</value>
   </data>
     <data name="Email_lead_body" xml:space="preserve">
     <value>Klient projevil zájem o licence a přeje si být kontaktován na {0}

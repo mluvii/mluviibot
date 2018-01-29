@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.ConnectorEx;
 using Microsoft.Bot.Builder.Dialogs;
@@ -38,7 +39,6 @@ namespace MluviiBot.Dialogs
             if (context.UserData.ContainsKey(Resources.Person_Key))
                 order.CustomerDetails = context.UserData.GetValue<Person>(Resources.Person_Key);
             order.ClientID = context.UserData.GetValue<string>(Resources.ClientID_Key);
-
             context.Wait(MessageReceivedAsync);
         }
 
@@ -71,15 +71,33 @@ namespace MluviiBot.Dialogs
             }
 
             var lower = message.Text.ToLower();
-            if (lower.Contains("produkt") || lower.Contains("1"))
+            if (lower.Contains("produkt") || lower.Contains("1") || lower.Contains("zájem") || lower.Contains("zajem") || lower.Contains("koupit"))
             {
                 await context.SayAsync("Děkuji, nyní bych od Vás potřeboval několik údajů:");
                 OnProductInterestSelected(context);
                 return;
             }
 
-            if (lower.Contains("dotaz") || lower.Contains("2"))
-                await ConnectToOperator(context, Resources.OperatorConnect_wait);
+            if (lower.Contains("dotaz") || lower.Contains("2") || lower.Contains("pouze") || lower.Contains("operator") || lower.Contains("operátor") || lower.Contains("člověk") || lower.Contains("clovek"))
+            {
+                await CheckAvailableOperators(context);
+                return;
+            }
+            
+            StartOver(context);
+        }
+
+        private void StartOver(IDialogContext context)
+        {
+            PromptDialog.Choice(context, async (dialogContext, subResult) =>
+                {
+                    var fakeMessage = dialogContext.MakeMessage();
+                    fakeMessage.Text = await subResult;
+                    await MessageReceivedAsync(dialogContext, new AwaitableFromItem<IMessageActivity>(fakeMessage));
+                },
+                new[] {Resources.MluviiDialog_product_interest, Resources.MluviiDialog_question},
+                Resources.MluviiDialog_welcome_prompt,
+                Resources.RetryText, MaxAttempts);
         }
 
         private void OnProductInterestSelected(IDialogContext context)
@@ -90,6 +108,15 @@ namespace MluviiBot.Dialogs
 
         private async Task OnPersonalDetailsGiven(IDialogContext context, IAwaitable<Person> result)
         {
+            try
+            {
+                await result;
+            }
+            catch (FormCanceledException<Person> e)
+            {
+                await OnPersonDialogCancelled(context, e);
+                return;
+            }
             order.CustomerDetails = await result;
             context.UserData.SetValue(Resources.Person_Key, order.CustomerDetails);
             await context.SayAsync("Děkuji");
@@ -101,6 +128,44 @@ namespace MluviiBot.Dialogs
                 });
 
             context.Call(locationDialog, AfterLocation);
+        }
+
+        private async Task OnPersonDialogCancelled(IDialogContext context, FormCanceledException<Person> formCanceledException)
+        {
+            order.CustomerDetails = formCanceledException.LastForm;
+            PromptDialog.Choice(context, async (subContext, result) =>
+                {
+                    try
+                    {
+                        await result;
+                    }
+                    catch (TooManyAttemptsException)
+                    {
+                        subContext.Call(dialogFactory.Create<HelpDialog, bool>(false), null);
+                        return;
+                    }
+                    var response = await result;
+                    if (response.ToLower().Contains("doplnit"))
+                    {
+                        var form = new FormDialog<Person>(order.CustomerDetails, Person.BuildForm, FormOptions.PromptInStart);
+                        subContext.Call(form, OnPersonalDetailsGiven);
+                        return;
+                    }
+
+                    if (response.ToLower().Contains("znovu"))
+                    {
+                        StartOver(subContext);
+                        return;
+                    }
+                    if (response.ToLower().Contains("spojit"))
+                    {
+                        await CheckAvailableOperators(subContext);
+                        return;
+                    }
+            },
+                new [] {Resources.MluviiDialog_return_back_to_person_form, Resources.HelpDialog_start_over, Resources.HelpDialog_connect_operator},
+                Resources.MluviiDialog_person_form_cancelled,
+                Resources.RetryText, MaxAttempts);
         }
 
         private async Task AfterLocation(IDialogContext context, IAwaitable<Place> result)
@@ -148,7 +213,12 @@ namespace MluviiBot.Dialogs
             }
 
             SetCallParams(context);
-            await context.SayAsync($"Dobře, momentík podívám se kdo z kolegů je volný.");
+            await CheckAvailableOperators(context);
+        }
+
+        private async Task CheckAvailableOperators(IDialogContext context)
+        {
+            await context.SayAsync(Resources.MluviiDialog_wait_checking_available_operators);
             context.Call(dialogFactory.Create<AvailibleOperatorsDialog>(), OnAvailibleOperatorsResponse);
         }
 
@@ -232,6 +302,7 @@ namespace MluviiBot.Dialogs
             act.Text = message;
             await context.PostAsync(act);
         }
+        
 
         private async void SetCallParams(IDialogContext context)
         {
@@ -259,7 +330,7 @@ namespace MluviiBot.Dialogs
                     await AskVerification(context);
                     break;
                 case DebugOptions.GotoOperatorSearch:
-                    context.Call(dialogFactory.Create<AvailibleOperatorsDialog>(), OnAvailibleOperatorsResponse);
+                    await CheckAvailableOperators(context);
                     break;
                 case DebugOptions.GotoMap:
                     await OnPersonalDetailsGiven(context, new AwaitableFromItem<Person>(order.CustomerDetails));

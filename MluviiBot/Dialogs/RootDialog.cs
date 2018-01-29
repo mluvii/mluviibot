@@ -47,11 +47,11 @@ namespace MluviiBot.Dialogs
 
             var options = new[]
             {
-                "Zájem o produkt",
-                "Pouze dotaz",
+                Resources.MluviiDialog_product_interest,
+                Resources.MluviiDialog_question,
             };
             reply.AddHeroCard(
-                "Dobrý den, jak Vám mohu pomoci?",
+                Resources.MluviiDialog_welcome_prompt,
                 "",
                 options);
 

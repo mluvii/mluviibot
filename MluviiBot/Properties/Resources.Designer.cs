@@ -263,6 +263,60 @@ namespace MluviiBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pokud si nepřejete nyní zadávat své údaje, můžu Vás místo toho spojit s operátorem..
+        /// </summary>
+        internal static string MluviiDialog_person_form_cancelled {
+            get {
+                return ResourceManager.GetString("MluviiDialog_person_form_cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zájem o produkt.
+        /// </summary>
+        internal static string MluviiDialog_product_interest {
+            get {
+                return ResourceManager.GetString("MluviiDialog_product_interest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pouze dotaz.
+        /// </summary>
+        internal static string MluviiDialog_question {
+            get {
+                return ResourceManager.GetString("MluviiDialog_question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Doplnit chybející údaje.
+        /// </summary>
+        internal static string MluviiDialog_return_back_to_person_form {
+            get {
+                return ResourceManager.GetString("MluviiDialog_return_back_to_person_form", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dobře, momentík podívám se kdo z kolegů je volný..
+        /// </summary>
+        internal static string MluviiDialog_wait_checking_available_operators {
+            get {
+                return ResourceManager.GetString("MluviiDialog_wait_checking_available_operators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dobrý den, jak Vám mohu pomoci?.
+        /// </summary>
+        internal static string MluviiDialog_welcome_prompt {
+            get {
+                return ResourceManager.GetString("MluviiDialog_welcome_prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dobře, přepojuji Vás na operátora. Prosím strpení..
         /// </summary>
         internal static string OperatorConnect_wait {
