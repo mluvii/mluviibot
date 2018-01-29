@@ -1,20 +1,20 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Internals;
 using Microsoft.Bot.Builder.Internals.Fibers;
 using Microsoft.Bot.Builder.Scorables;
 using Microsoft.Bot.Connector;
+using MluviiBot.BotAssets;
 #pragma warning disable 1998
 namespace MluviiBot.Dialogs
 {
-    public class SettingsScorable : IScorable<IActivity, double>
+    public class HelpScorable : IScorable<IActivity, double>
     {
-        private readonly IDialogTask task;
         private readonly IMluviiBotDialogFactory dialogFactory;
+        private readonly IDialogTask task;
 
-        public SettingsScorable(IDialogTask task, IMluviiBotDialogFactory dialogFactory)
+        public HelpScorable(IDialogTask task, IMluviiBotDialogFactory dialogFactory)
         {
             SetField.NotNull(out this.task, nameof(task), task);
             SetField.NotNull(out this.dialogFactory, nameof(dialogFactory), dialogFactory);
@@ -25,12 +25,8 @@ namespace MluviiBot.Dialogs
             var message = item as IMessageActivity;
 
             if (!string.IsNullOrWhiteSpace(message?.Text))
-            {
-                if (new [] {"pomoc", "zpet", "zpět", "nevim", "co?"}.Contains(message.Text.ToLower()))
-                {
+                if (RegexConstants.CONFUSED.IsMatch(StringUtils.RemoveDiacritics(message.Text)))
                     return message.Text;
-                }
-            }
 
             return null;
         }
@@ -42,7 +38,7 @@ namespace MluviiBot.Dialogs
 
         public double GetScore(IActivity item, object state)
         {
-            bool matched = state != null;
+            var matched = state != null;
             var score = matched ? 1.0 : double.NaN;
             return score;
         }
@@ -53,17 +49,17 @@ namespace MluviiBot.Dialogs
 
             if (message != null)
             {
-                var settingsDialog = new SettingsDialog(this.dialogFactory);
+                var helpDialog = dialogFactory.Create<HelpDialog>();
 
                 // wrap it with an additional dialog that will restart the wait for
                 // messages from the user once the child dialog has finished
-                var interruption = settingsDialog.Void<object, IMessageActivity>();
+                var interruption = helpDialog.Void<object, IMessageActivity>();
 
                 // put the interrupting dialog on the stack
-                this.task.Call(interruption, null);
+                task.Call(interruption, null);
 
                 // start running the interrupting dialog
-                await this.task.PollAsync(token);
+                await task.PollAsync(token);
             }
         }
 

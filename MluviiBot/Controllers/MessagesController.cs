@@ -1,18 +1,17 @@
-﻿namespace ContosoFlowers
-{
-    using System;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using System.Web.Http;
-    using Autofac;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Dialogs.Internals;
-    using Microsoft.Bot.Connector;
-    using Properties;
-    using ContosoFlowers.BotAssets.Extensions;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
+using Autofac;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Internals;
+using Microsoft.Bot.Connector;
+using MluviiBot.BotAssets.Extensions;
 
+namespace MluviiBot.Controllers
+{
     [BotAuthentication]
     public class MessagesController : ApiController
     {
@@ -22,22 +21,11 @@
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message)
+            if (activity.Type == ActivityTypes.Message || activity.Type == ActivityTypes.Event)
             {
-                //The Configured IISExpressSSLPort property in this project file
-                const int ConfiguredHttpsPort = 44371;
-
-                var link = Url.Link("CheckOut", new { controller = "CheckOut", action = "Index" });
-                var uriBuilder = new UriBuilder(link)
-                {
-                    Scheme = Uri.UriSchemeHttps,
-                    Port = ConfiguredHttpsPort
-                };
-                var checkOutRouteUri = uriBuilder.Uri.ToString();
-
                 using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, activity))
                 {
-                    var dialog = scope.Resolve<IDialog<object>>(TypedParameter.From(checkOutRouteUri));
+                    var dialog = scope.Resolve<IDialog<object>>();
                     await Conversation.SendAsync(activity, () => dialog);
                 }
             }
@@ -61,24 +49,12 @@
             {
                 if (message.MembersAdded.Any(o => o.Id == message.Recipient.Id))
                 {
-                    //var reply = message.CreateReply(Resources.RootDialog_Welcome_Message);
                     var reply = message.CreateReply();
-
-                    var options = new[]
+                    using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, message))
                     {
-                        "Sjednat cestovní pojištění",
-                        "Nahlásit pojistnou událost",
-                    };
-                    reply.AddHeroCard(
-                        "Ahoj jak ti mohu pomoci?",
-                        "",
-                        options,
-                        new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
-                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
-
-                    await connector.Conversations.ReplyToActivityAsync(reply);
-
-                    // The Configured IISExpressSSLPort property in this project file
+                        var dialog = scope.Resolve<IDialog<object>>();
+                        await Conversation.SendAsync(message, () => dialog);
+                    }
                 }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)

@@ -1,19 +1,16 @@
-﻿using MluviiBot.BLL;
+﻿using System.Configuration;
+using Autofac;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Internals.Fibers;
+using Microsoft.Bot.Builder.Location;
+using Microsoft.Bot.Builder.Scorables;
+using Microsoft.Bot.Connector;
+using MluviiBot.BotAssets;
+using MluviiBot.BotAssets.Dialogs;
+using MluviiBot.Dialogs;
 
-namespace ContosoFlowers
+namespace MluviiBot
 {
-    using System.Configuration;
-    using Autofac;
-    using BotAssets;
-    using BotAssets.Dialogs;
-    using Dialogs;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Internals.Fibers;
-    using Microsoft.Bot.Builder.Location;
-    using Microsoft.Bot.Builder.Scorables;
-    using Microsoft.Bot.Connector;
-    using Services.Models;
-
     public class MluviiBotModule : Module
     {
         protected override void Load(ContainerBuilder builder)
@@ -25,63 +22,46 @@ namespace ContosoFlowers
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<FakeCrmService>()
-                .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
-
             builder.RegisterType<RootDialog>()
                 .As<IDialog<object>>()
                 .InstancePerDependency();
-
-            builder.RegisterType<SettingsScorable>()
-                .As<IScorable<IActivity, double>>()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<FlowerCategoriesDialog>()
+            
+            builder.RegisterType<MluviiDialog>()
                 .InstancePerDependency();
 
-            builder.RegisterType<BouquetsDialog>()
-                .InstancePerDependency();
 
-            builder.RegisterType<SavedAddressDialog>()
-              .InstancePerDependency();
-
-            builder.RegisterType<SettingsDialog>()
+            builder.RegisterType<EditDetailsDialog>()
              .InstancePerDependency();
 
-            builder.RegisterType<InsuranceDialog>()
+            builder.RegisterType<HandoverDialog>()
+             .InstancePerDependency();
+
+            builder.RegisterType<HelpDialog>()
                 .InstancePerDependency();
 
-            builder.RegisterType<PersonDialog>()
+            builder.RegisterType<DebugDialog>()
+                .InstancePerDependency();
+            
+            builder.RegisterType<AvailibleOperatorsDialog>()
                 .InstancePerDependency();
 
-            builder.RegisterType<InsurancePackageDialog>()
-                .InstancePerDependency();
-
+            builder.RegisterType<HelpScorable>()
+                .As<IScorable<IActivity, double>>()
+                .InstancePerLifetimeScope();
+            
+            builder.RegisterType<DebugScorable>()
+                .As<IScorable<IActivity, double>>()
+                .InstancePerLifetimeScope();
+            
             // Location Dialog
             // ctor signature: LocationDialog(string apiKey, string channelId, string prompt, LocationOptions options = LocationOptions.None, LocationRequiredFields requiredFields = LocationRequiredFields.None, LocationResourceManager resourceManager = null);
             builder.RegisterType<LocationDialog>()
                 .WithParameter("apiKey", ConfigurationManager.AppSettings["MicrosoftBingMapsKey"])
-                .WithParameter("options", LocationOptions.UseNativeControl | LocationOptions.ReverseGeocode)
+                .WithParameter("options", LocationOptions.UseNativeControl | LocationOptions.ReverseGeocode | LocationOptions.SkipFavorites)
                 .WithParameter("requiredFields", LocationRequiredFields.StreetAddress | LocationRequiredFields.Locality | LocationRequiredFields.Country)
-                .WithParameter("resourceManager", new ContosoLocationResourceManager())
+                .WithParameter("resourceManager", new MluviiLocationResourceManager())
+                .WithParameter("prompt", "")
                 .InstancePerDependency();
-
-            // Service dependencies
-            builder.RegisterType<Services.InMemoryOrdersService>()
-                .Keyed<Services.IOrdersService>(FiberModule.Key_DoNotSerialize)
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<Services.InMemoryBouquetRepository>()
-                .Keyed<Services.IRepository<Bouquet>>(FiberModule.Key_DoNotSerialize)
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<Services.InMemoryFlowerCategoriesRepository>()
-                .Keyed<Services.IRepository<FlowerCategory>>(FiberModule.Key_DoNotSerialize)
-                .AsImplementedInterfaces()
-                .SingleInstance();
         }
     }
 }

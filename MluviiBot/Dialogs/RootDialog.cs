@@ -1,45 +1,30 @@
-﻿using MluviiBot.BLL;
+﻿
+using System;
+using System.Threading.Tasks;
+using Microsoft.Bot.Builder.ConnectorEx;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Connector;
+using MluviiBot.BotAssets.Extensions;
+using MluviiBot.Properties;
 
-namespace ContosoFlowers.Dialogs
+namespace MluviiBot.Dialogs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Threading.Tasks;
-    using System.Web;
-    using AutoMapper;
-    using BotAssets.Dialogs;
-    using BotAssets.Extensions;
-    using Microsoft.Bot.Builder.ConnectorEx;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.FormFlow;
-    using Microsoft.Bot.Builder.Location;
-    using Microsoft.Bot.Connector;
-    using Models;
-    using Properties;
-    using Services;
-    using Services.Models;
-
     [Serializable]
     public class RootDialog : IDialog<object>
     {
-        private readonly string checkoutUriFormat;
         private readonly IMluviiBotDialogFactory dialogFactory;
-        private readonly IOrdersService ordersService;
 
         private Models.Order order;
         private ConversationReference conversationReference;
         
-        public RootDialog(string checkoutUriFormat, IMluviiBotDialogFactory dialogFactory, IOrdersService ordersService)
+        public RootDialog(IMluviiBotDialogFactory dialogFactory)
         {
-            this.checkoutUriFormat = checkoutUriFormat;
             this.dialogFactory = dialogFactory;
-            this.ordersService = ordersService;
         }
 
         public async Task StartAsync(IDialogContext context)
         {
-            context.Call(this.dialogFactory.Create<InsuranceDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
+            await this.WelcomeMessageAsync(context);
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -62,40 +47,23 @@ namespace ContosoFlowers.Dialogs
 
             var options = new[]
             {
-                "Sjednat cestovní pojištění",
-                "Nahlásit pojistnou událost",
+                Resources.MluviiDialog_product_interest,
+                Resources.MluviiDialog_question,
             };
             reply.AddHeroCard(
-                "Ahoj jak ti mohu pomoci?",
+                Resources.MluviiDialog_welcome_prompt,
                 "",
-                options,
-                new[] { "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAy8AAAAJGVmNWQ3NjEwLWM3ZDQtNDg4Yy1hYjgxLTQ3NjMxYjUxMWI5ZA.png" });
+                options);
 
             await context.PostAsync(reply);
-            
 
-            context.Call(this.dialogFactory.Create<InsuranceDialog, string>(checkoutUriFormat), this.AfterOrderCompleted);
+            context.Call(this.dialogFactory.Create<MluviiDialog>(), this.AfterOrderCompleted);
         }
 
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)
         {
             order = await result;
-            await context.SayAsync("Nevim co dál protože sem mrzák. Ahoj.");
-            context.Done(order);
-        }
-
-        private async Task StartOverAsync(IDialogContext context, string text)
-        {
-            var message = context.MakeMessage();
-            message.Text = text;
-            await this.StartOverAsync(context, message);
-        }
-
-        private async Task StartOverAsync(IDialogContext context, IMessageActivity message)
-        {
-            await context.PostAsync(message);
-            this.order = new Models.Order();
-            await this.WelcomeMessageAsync(context);
+            context.Wait(MessageReceivedAsync);
         }
     }
 }

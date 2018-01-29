@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ContosoFlowers.Properties {
+namespace MluviiBot.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ContosoFlowers.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ContosoFlowers.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MluviiBot.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -88,11 +88,105 @@ namespace ContosoFlowers.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zrušit objednávku.
+        /// </summary>
+        internal static string cancel_order {
+            get {
+                return ResourceManager.GetString("cancel_order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zpět.
+        /// </summary>
+        internal static string CancellableDialog_back {
+            get {
+                return ResourceManager.GetString("CancellableDialog_back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ClientGUID.
         /// </summary>
         internal static string ClientID_Key {
             get {
                 return ResourceManager.GetString("ClientID_Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adresa.
+        /// </summary>
+        internal static string EditDetailsDialog_option_address {
+            get {
+                return ResourceManager.GetString("EditDetailsDialog_option_address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        internal static string EditDetailsDialog_option_email {
+            get {
+                return ResourceManager.GetString("EditDetailsDialog_option_email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jméno.
+        /// </summary>
+        internal static string EditDetailsDialog_option_name {
+            get {
+                return ResourceManager.GetString("EditDetailsDialog_option_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telefon.
+        /// </summary>
+        internal static string EditDetailsDialog_option_phone {
+            get {
+                return ResourceManager.GetString("EditDetailsDialog_option_phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Který údaj si přejete změnit.
+        /// </summary>
+        internal static string EditDetailsDialogDialog_prompt {
+            get {
+                return ResourceManager.GetString("EditDetailsDialogDialog_prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Klient projevil zájem o licence a přeje si být kontaktován na {0}
+        ///Jméno: {1}
+        ///Telefon: {2}
+        ///Email: {3}
+        ///Adresa: {4}.
+        /// </summary>
+        internal static string Email_lead_body {
+            get {
+                return ResourceManager.GetString("Email_lead_body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chatbot.
+        /// </summary>
+        internal static string Email_lead_subject {
+            get {
+                return ResourceManager.GetString("Email_lead_subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Děkujeme za Váš zájem, budeme Vás kontaktovat v nejbližší možnou dobu..
+        /// </summary>
+        internal static string Email_thankyou {
+            get {
+                return ResourceManager.GetString("Email_thankyou", resourceCulture);
             }
         }
         
@@ -124,6 +218,141 @@ namespace ContosoFlowers.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nashledanou.
+        /// </summary>
+        internal static string goodbye {
+            get {
+                return ResourceManager.GetString("goodbye", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spojit se s operátorem.
+        /// </summary>
+        internal static string HelpDialog_connect_operator {
+            get {
+                return ResourceManager.GetString("HelpDialog_connect_operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Změnit své údaje.
+        /// </summary>
+        internal static string HelpDialog_edit_details {
+            get {
+                return ResourceManager.GetString("HelpDialog_edit_details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vypadá to, že si nevíte rady, veberte jednu z možností..
+        /// </summary>
+        internal static string HelpDialog_Prompt {
+            get {
+                return ResourceManager.GetString("HelpDialog_Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Začít znovu.
+        /// </summary>
+        internal static string HelpDialog_start_over {
+            get {
+                return ResourceManager.GetString("HelpDialog_start_over", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pokud si nepřejete nyní zadávat své údaje, můžu Vás místo toho spojit s operátorem..
+        /// </summary>
+        internal static string MluviiDialog_person_form_cancelled {
+            get {
+                return ResourceManager.GetString("MluviiDialog_person_form_cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zájem o produkt.
+        /// </summary>
+        internal static string MluviiDialog_product_interest {
+            get {
+                return ResourceManager.GetString("MluviiDialog_product_interest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pouze dotaz.
+        /// </summary>
+        internal static string MluviiDialog_question {
+            get {
+                return ResourceManager.GetString("MluviiDialog_question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Doplnit chybející údaje.
+        /// </summary>
+        internal static string MluviiDialog_return_back_to_person_form {
+            get {
+                return ResourceManager.GetString("MluviiDialog_return_back_to_person_form", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dobře, momentík podívám se kdo z kolegů je volný..
+        /// </summary>
+        internal static string MluviiDialog_wait_checking_available_operators {
+            get {
+                return ResourceManager.GetString("MluviiDialog_wait_checking_available_operators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dobrý den, jak Vám mohu pomoci?.
+        /// </summary>
+        internal static string MluviiDialog_welcome_prompt {
+            get {
+                return ResourceManager.GetString("MluviiDialog_welcome_prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dobře, přepojuji Vás na operátora. Prosím strpení..
+        /// </summary>
+        internal static string OperatorConnect_wait {
+            get {
+                return ResourceManager.GetString("OperatorConnect_wait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Je nám líto, momentálně nejsou k dispozici žádní operátoři..
+        /// </summary>
+        internal static string OperatorSelection_none_availible {
+            get {
+                return ResourceManager.GetString("OperatorSelection_none_availible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Přejete si kontaktovat emailem nebo telefonicky?.
+        /// </summary>
+        internal static string OperatorSelection_none_availible_prompt {
+            get {
+                return ResourceManager.GetString("OperatorSelection_none_availible_prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nechci teď mluvit s operátorem.
+        /// </summary>
+        internal static string OperatorSelection_not_interesed {
+            get {
+                return ResourceManager.GetString("OperatorSelection_not_interesed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What&apos;s the {&amp;}?.
         /// </summary>
         internal static string Order_RecipientFirstName_Prompt {
@@ -133,7 +362,25 @@ namespace ContosoFlowers.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nerozuměl jsem, můžeš mi to napsat ještě jednou?.
+        ///   Looks up a localized string similar to Je nám líto, že jste se rozhodl objednávku zrušit. Snad Vás brzy znovu uvidíme na našich stránkách :).
+        /// </summary>
+        internal static string OrderCanceled {
+            get {
+                return ResourceManager.GetString("OrderCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person.
+        /// </summary>
+        internal static string Person_Key {
+            get {
+                return ResourceManager.GetString("Person_Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nerozuměl jsem, můžete to zkusit ještě jednou?.
         /// </summary>
         internal static string RetryText {
             get {

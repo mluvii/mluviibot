@@ -1,8 +1,8 @@
-﻿namespace ContosoFlowers
-{
-    using System.Web.Mvc;
-    using System.Web.Routing;
+﻿using System.Web.Mvc;
+using System.Web.Routing;
 
+namespace MluviiBot
+{
     public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
