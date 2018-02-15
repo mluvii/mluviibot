@@ -37,7 +37,7 @@ namespace MluviiBot.Dialogs
 
         private async Task AfterOrderCompleted(IDialogContext context, IAwaitable<Models.Order> result)
         {
-            order = await result;
+            context.EndConversation("0");
         }
     }
 }
