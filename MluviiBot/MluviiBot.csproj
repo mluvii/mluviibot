@@ -171,7 +171,6 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
-    <Content Include="Properties\PublishProfiles\mluviktest.PublishSettings" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
