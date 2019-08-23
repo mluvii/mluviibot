@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Linq;
@@ -26,13 +27,19 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
             }
             else
             {
-                HandleSystemMessage(activity);
+                await HandleSystemMessage(activity);
             }
             return new HttpResponseMessage(System.Net.HttpStatusCode.Accepted);
         }
 
-        private Activity HandleSystemMessage(Activity message)
+        private async Task<Activity> HandleSystemMessage(Activity message)
         {
+        
+            var client = new ConnectorClient(new Uri(message.ServiceUrl), new MicrosoftAppCredentials());
+            var reply = message.CreateReply();
+            reply.Text = $"I got this: {message.Type}";
+            await client.Conversations.ReplyToActivityAsync(reply);
+            
             if (message.Type == ActivityTypes.DeleteUserData)
             {
                 // Implement user deletion here
