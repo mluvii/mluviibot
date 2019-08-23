@@ -35,10 +35,11 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
         private async Task<Activity> HandleSystemMessage(Activity message)
         {
-        
+            var logline = $"I got this: Type: {message.Type}. Full json: {JsonConvert.SerializeObject(message)}";
+            Console.WriteLine(logline);
             var client = new ConnectorClient(new Uri(message.ServiceUrl), new MicrosoftAppCredentials());
             var reply = message.CreateReply();
-            reply.Text = $"I got this: Type: {message.Type} MembersAdded: {message.MembersAdded.Count} Entities: {message.Entities.Count} Recipitne: {message.Recipient}. Full json: {JsonConvert.SerializeObject(message)}";
+            reply.Text = logline;
             await client.Conversations.ReplyToActivityAsync(reply);
             
             if (message.Type == ActivityTypes.DeleteUserData)
