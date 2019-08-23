@@ -6,6 +6,7 @@ using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder.Dialogs;
 using System.Web.Http.Description;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Microsoft.Bot.Sample.SimpleEchoBot
 {
@@ -37,7 +38,7 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
         
             var client = new ConnectorClient(new Uri(message.ServiceUrl), new MicrosoftAppCredentials());
             var reply = message.CreateReply();
-            reply.Text = $"I got this: {message.Type}";
+            reply.Text = $"I got this: Type: {message.Type} MembersAdded: {message.MembersAdded.Count} Entities: {message.Entities.Count} Recipitne: {message.Recipient}. Full json: {JsonConvert.SerializeObject(message)}";
             await client.Conversations.ReplyToActivityAsync(reply);
             
             if (message.Type == ActivityTypes.DeleteUserData)
