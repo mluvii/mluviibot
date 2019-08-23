@@ -35,8 +35,8 @@ namespace Microsoft.Bot.Sample.SimpleEchoBot
 
         private async Task<Activity> HandleSystemMessage(Activity message)
         {
-            var logline = $"I got this: Type: {message.Type}. Full json: {JsonConvert.SerializeObject(message)}";
-            Console.WriteLine(logline);
+            var logline = $"Received system message: Type: {message.Type}. Full json: {JsonConvert.SerializeObject(message)}";
+            System.Diagnostics.Trace.WriteLine(logline);
             var client = new ConnectorClient(new Uri(message.ServiceUrl), new MicrosoftAppCredentials());
             var reply = message.CreateReply();
             reply.Text = logline;
